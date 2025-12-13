@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hema Tech - محتوى مميز</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0d1b2a;
+      --primary-light: #1b263b;
+      --secondary: #415a77;
+      --accent: #ff6b6b;
+      --accent-light: #ff8e8e;
+      --accent-secondary: #4ecdc4;
+      --light: #f8f9fa;
+      --light-gray: #e9ecef;
+      --dark-gray: #6c757d;
+      --success: #51cf66;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      --gradient: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+      --gradient-accent: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+      --gradient-success: linear-gradient(135deg, #51cf66 0%, #69db7c 100%);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Tajawal", sans-serif;
+      background: var(--gradient);
+      color: var(--light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* تصميم الخلفية */
+    .background {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    .bg-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+      opacity: 0.6;
+    }
+
+    .bg-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.05;
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--accent);
+      top: -150px;
+      right: -150px;
+    }
+
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      background: var(--accent-secondary);
+      bottom: -100px;
+      left: -100px;
+    }
+
+    .shape-3 {
+      width: 150px;
+      height: 150px;
+      background: var(--light);
+      top: 50%;
+      left: 10%;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    /* شعار جديد */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .logo-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+      background: var(--glass-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--glass-shadow);
+      border: 2px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      transform: rotate(45deg);
+      transition: var(--transition);
+    }
+
+    .logo:hover {
+      transform: rotate(0deg) scale(1.05);
+    }
+
+    .logo::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateX(-100%);
+    }
+
+    .logo:hover::before {
+      animation: shine 0.8s ease;
+    }
+
+    .logo-image {
+      width: 70%;
+      height: 70%;
+      border-radius: 12px;
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-45deg);
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-name {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-tagline {
+      color: var(--light-gray);
+      font-size: 1rem;
+      max-width: 350px;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    /* بطاقة المحتوى */
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      box-shadow: var(--glass-shadow);
+      width: 100%;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 25px;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .card-header {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .content-image {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      height: 200px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+    }
+
+    .content-image:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .content-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .content-image:hover img {
+      transform: scale(1.05);
+    }
+
+    .content-title {
+      color: var(--light);
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 1.8rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .content-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      right: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--gradient-accent);
+      border-radius: 4px;
+    }
+
+    .content-desc {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 25px;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* قسم التقدم */
+    .progress-section {
+      margin: 25px 0;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      height: 12px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--gradient-accent);
+      transition: width 0.6s ease;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    /* المهام */
+    .tasks-container {
+      margin: 25px 0;
+    }
+
+    .task {
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .task:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(-5px);
+    }
+
+    .task.completed {
+      background: rgba(81, 207, 102, 0.1);
+      border-color: rgba(81, 207, 102, 0.2);
+    }
+
+    .task-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .task-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: rgba(255, 107, 107, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .task.completed .task-icon {
+      background: rgba(81, 207, 102, 0.2);
+      color: var(--success);
+    }
+
+    .task-text {
+      text-align: right;
+      flex: 1;
+    }
+
+    .task-title {
+      font-weight: 600;
+      color: var(--light);
+      margin-bottom: 5px;
+      font-size: 1.1rem;
+    }
+
+    .task-desc {
+      font-size: 0.85rem;
+      color: var(--dark-gray);
+    }
+
+    .task-btn {
+      background: var(--gradient-accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    .task-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    .task-btn:active {
+      transform: scale(0.98);
+    }
+
+    .task.completed .task-btn {
+      background: var(--gradient-success);
+      box-shadow: 0 5px 15px rgba(81, 207, 102, 0.3);
+    }
+
+    /* زر فتح المحتوى */
+    .unlock-btn {
+      display: none;
+      margin-top: 30px;
+      background: var(--gradient-accent);
+      color: #fff;
+      border: none;
+      padding: 18px 30px;
+      border-radius: 14px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .unlock-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.5);
+    }
+
+    .unlock-btn:active {
+      transform: translateY(-2px);
+    }
+
+    .unlock-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    /* عداد الفتحات */
+    .counter {
+      margin-top: 20px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px 25px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .counter i {
+      color: var(--accent);
+    }
+
+    /* قسم الإعلان */
+    .ad-container {
+      width: 100%;
+      max-width: 500px;
+      margin: 25px auto;
+      border-radius: 16px;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease-out 0.4s both;
+    }
+
+    .ad-container div[data-mndazid] {
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    /* التذييل */
+    .footer {
+      width: 100%;
+      max-width: 500px;
+      margin-top: 30px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--glass-shadow);
+      animation: fadeIn 1s ease-out 0.6s both;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .copyright {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .brand-footer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .youtube-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .youtube-link:hover {
+      background: rgba(255, 0, 0, 0.1);
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    .youtube-link i {
+      color: #ff0000;
+      font-size: 1.3rem;
+    }
+
+    /* الرسوم المتحركة */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* مؤشر التحميل */
+    .loader {
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* التأثيرات على الأجهزة المحمولة */
+    @media (max-width: 480px) {
+      .card {
+        padding: 25px 20px;
+        border-radius: 18px;
+      }
+      
+      .content-title {
+        font-size: 1.6rem;
+      }
+      
+      .task {
+        padding: 15px;
+      }
+      
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .brand-name {
+        font-size: 2.2rem;
+      }
+      
+      .unlock-btn {
+        padding: 16px 25px;
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- الخلفية -->
+  <div class="background">
+    <div class="bg-pattern"></div>
+    <div class="bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- الرأس -->
+    <header class="header">
+      <div class="logo-container">
+        <div class="logo">
+          <div class="logo-image">
+            <img src="https://i.postimg.cc/rsFJxvR6/20251016-233545.png" alt="شعار Hema Tech">
+          </div>
+        </div>
+      </div>
+      <h1 class="brand-name">Hema Tech</h1>
+      <p class="brand-tagline">انقر على "بدء" أو "فتح"، قد تظهر النوافذ المنبثقة/الإعلانات وقد تكون مزعجة، لكنها تدعم مباشرةً منشئي هذا الرابط.</p>
+    </header>
+
+    <!-- البطاقة الرئيسية -->
+    <main class="card">
+      <div class="card-header">
+        <div class="content-image">
+          <img id="linkImage" src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="محتوى مميز">
+        </div>
+        <h2 class="content-title" id="linkTitle">محتوى مميز</h2>
+        <p class="content-desc" id="linkDesc">افتح المحتوى الحصري عن طريق إكمال المهام أدناه. هذه تجربة مميزة مع ميزات وفوائد محسّنة.</p>
+      </div>
+
+      <!-- شريط التقدم -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <span>التقدم</span>
+          <span id="progressText">0%</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <!-- قائمة المهام -->
+      <div class="tasks-container" id="taskList">
+        <!-- ستضاف المهام هنا -->
+      </div>
+
+      <!-- زر فتح المحتوى -->
+      <button id="unlockBtn" class="unlock-btn">فتح المحتوى المميز 🔓</button>
+      
+      <!-- العداد -->
+      <div class="counter" id="countView">
+        <i class="fas fa-crown"></i>
+        <span>0 فتحات مميزة</span>
+      </div>
+    </main>
+
+    <!-- الإعلان -->
+    <div class="ad-container">
+      <div data-mndazid="9160e4b4-01cf-44a1-9a70-a68ef3039f40"></div>
+    </div>
+
+    <!-- التذييل -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="copyright">جميع الحقوق محفوظة لـ Hema Tech © 2025-2026</div>
+        <div class="brand-footer">
+          <i class="fas fa-crown"></i>
+          <span>Hema Tech</span>
+        </div>
+        <a href="https://youtube.com/@hema_tech1?si=UqCsC50yMsxuftwX" target="_blank" class="youtube-link">
+          <i class="fab fa-youtube"></i>
+          <span>Hema Tech على يوتيوب</span>
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
+      authDomain: "hhhhhh-d4fb8.firebaseapp.com",
+      databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
+      projectId: "hhhhhh-d4fb8",
+      storageBucket: "hhhhhh-d4fb8.appspot.com",
+      messagingSenderId: "24512338206",
+      appId: "1:24512338206:web:dfe045db59bd3434a2110f",
+      measurementId: "G-HD4R7GNQ5H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const linkId = urlParams.get("id");
+
+    const linkImage = document.getElementById("linkImage");
+    const linkTitle = document.getElementById("linkTitle");
+    const linkDesc = document.getElementById("linkDesc");
+    const taskList = document.getElementById("taskList");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const countView = document.getElementById("countView");
+
+    let tasks = [];
+    let completed = 0;
+    let destination = "";
+    let docId = "";
+    let unlockCount = 0;
+    let canClickUnlock = true;
+
+    // بيانات تجريبية للعرض
+    const demoData = {
+      coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      title: "محتوى مميز",
+      description: "افتح المحتوى الحصري عن طريق إكمال المهام أدناه. هذه تجربة مميزة مع ميزات وفوائد محسّنة.",
+      destination: "https://www.example.com",
+      tasks: [
+        { 
+          typeLabel: "الاشتراك في القناة", 
+          link: "https://youtube.com/@hema_tech1", 
+          done: false,
+          icon: "fab fa-youtube",
+          description: "اشترك في قناة Hema Tech على يوتيوب"
+        },
+        { 
+          typeLabel: "مشاهدة الفيديو", 
+          link: "https://www.example.com/video1", 
+          done: false,
+          icon: "fas fa-play",
+          description: "شاهد الفيديو المطلوب حتى النهاية"
+        },
+        { 
+          typeLabel: "الانضمام للمجموعة", 
+          link: "https://www.example.com/group", 
+          done: false,
+          icon: "fas fa-users",
+          description: "انضم إلى مجموعة التليجرام الخاصة بنا"
+        }
+      ],
+      unlockCount: 42
+    };
+
+    // استخدام البيانات التجريبية إذا لم يكن هناك رابط
+    if (!linkId) {
+      linkImage.src = demoData.coverUrl;
+      linkTitle.textContent = demoData.title;
+      linkDesc.textContent = demoData.description;
+      destination = demoData.destination;
+      tasks = demoData.tasks;
+      unlockCount = demoData.unlockCount;
+
+      countView.querySelector("span").textContent = `${unlockCount} فتحات مميزة`;
+      renderTasks();
+    } else if (linkId) {
+      const q = query(collection(db, "links"), where("idField", "==", linkId));
+      getDocs(q).then(snapshot => {
+        if (!snapshot.empty) {
+          const docSnap = snapshot.docs[0];
+          const data = docSnap.data();
+          docId = docSnap.id;
+
+          linkImage.src = data.coverUrl;
+          linkTitle.textContent = data.title;
+          linkDesc.textContent = data.description;
+          destination = data.destination;
+          tasks = data.tasks || [];
+          unlockCount = data.unlockCount || 0;
+
+          countView.querySelector("span").textContent = `${unlockCount} فتحات مميزة`;
+          renderTasks();
+        } else {
+          linkTitle.textContent = "الرابط غير موجود";
+        }
+      });
+    }
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      completed = tasks.filter(t => t.done).length;
+
+      const progress = (completed / tasks.length) * 100;
+      progressBar.style.width = progress + "%";
+      progressText.textContent = `${Math.round(progress)}%`;
+
+      tasks.forEach((task, index) => {
+        const div = document.createElement("div");
+        div.className = `task ${task.done ? 'completed' : ''}`;
+        
+        // إخفاء المهام القادمة
+        if (index > completed) {
+          div.style.display = "none";
+        }
+
+        div.innerHTML = `
+          <div class="task-content">
+            <div class="task-icon">
+              <i class="${task.icon || 'fas fa-tasks'}"></i>
+            </div>
+            <div class="task-text">
+              <div class="task-title">${task.typeLabel || "مهمة"}</div>
+              <div class="task-desc">${task.description || "أكمل هذه المهمة للمتابعة"}</div>
+            </div>
+          </div>
+          ${task.done ? 
+            '<button class="task-btn" style="background: var(--gradient-success);"><i class="fas fa-check"></i> مكتمل</button>' : 
+            `<button class="task-btn" onclick="startTask(${index})">بدء</button>`
+          }
+        `;
+        taskList.appendChild(div);
+      });
+
+      if (completed === tasks.length && tasks.length > 0) {
+        unlockBtn.style.display = "block";
+      } else {
+        unlockBtn.style.display = "none";
+      }
+    }
+
+    window.startTask = function(index) {
+      const div = taskList.children[index];
+      const button = div.querySelector("button");
+      
+      if (button) {
+        button.outerHTML = `<div class='loader'></div>`;
+      }
+
+      // فتح رابط المهمة
+      if (tasks[index] && tasks[index].link) {
+        window.open(tasks[index].link, "_blank");
+      }
+
+      // بعد 10 ثوانٍ، اعتبار المهمة مكتملة
+      setTimeout(() => {
+        if (tasks[index]) {
+          tasks[index].done = true;
+          renderTasks();
+        }
+      }, 10000);
+    };
+
+    // وظيفة لمنع التكرار في زر الفتح
+    function handleUnlockClick() {
+      if (!canClickUnlock) {
+        return;
+      }
+      
+      canClickUnlock = false;
+      unlockBtn.disabled = true;
+      unlockBtn.textContent = "⏳ الرجاء الانتظار 10 ثوانٍ";
+      
+      // فتح الرابط
+      if (destination) {
+        window.open(destination, "_blank");
+      }
+      
+      // تحديث العداد في قاعدة البيانات
+      if (docId) {
+        const docRef = doc(db, "links", docId);
+        updateDoc(docRef, { unlockCount: increment(1) })
+          .then(() => {
+            unlockCount++;
+            countView.querySelector("span").textContent = `${unlockCount} فتحات مميزة`;
+          })
+          .catch(error => {
+            console.error("Error updating unlock count:", error);
+          });
+      } else {
+        // في حالة البيانات التجريبية
+        unlockCount++;
+        countView.querySelector("span").textContent = `${unlockCount} فتحات مميزة`;
+      }
+      
+      // إعادة تمكين الزر بعد 10 ثوانٍ
+      setTimeout(() => {
+        canClickUnlock = true;
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = "فتح المحتوى المميز 🔓";
+      }, 10000);
+    }
+
+    // إضافة مستمع الحدث للزر مع منع التكرار
+    unlockBtn.addEventListener("click", handleUnlockClick);
+  </script>
+</body>
+</html>

@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hema Tech - Premium Tasks</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -16,18 +14,13 @@
       --accent: #6a4cff;
       --accent-light: #8a6eff;
       --accent-secondary: #00e0ff;
-      --dark: #05050c;
       --light: #f0f0f0;
       --gray: #8a8a9e;
       --success: #00ff9d;
+      --gradient-dark: linear-gradient(135deg, #05050c 0%, #0a0a14 50%, #1a1a2e 100%);
+      --gradient-accent: linear-gradient(135deg, #6a4cff 0%, #8a6eff 100%);
       --glass-bg: rgba(255, 255, 255, 0.08);
       --glass-border: rgba(255, 255, 255, 0.12);
-      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      --gradient: linear-gradient(135deg, #1a1a2e 0%, #6a4cff 50%, #0a0a14 100%);
-      --gradient-accent: linear-gradient(135deg, #6a4cff 0%, #8a6eff 100%);
-      --gradient-dark: linear-gradient(135deg, #05050c 0%, #0a0a14 50%, #1a1a2e 100%);
-      --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-      --gradient-glass-blur: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
       --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       --transition: all 0.3s ease;
     }
@@ -45,46 +38,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       min-height: 100vh;
       padding: 20px;
       line-height: 1.6;
-    }
-
-    /* Simple loading overlay */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(5, 5, 12, 0.95);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    .loading-overlay.hidden {
-      display: none;
-    }
-
-    .loader {
-      width: 60px;
-      height: 60px;
-      border: 4px solid var(--accent);
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-
-    .loader-text {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--accent);
-      text-align: center;
     }
 
     .container {
@@ -93,90 +49,21 @@
       margin: 0 auto;
     }
 
-    /* Premium Logo Styles */
-    .logo-container {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .logo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: var(--gradient-glass-blur);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto;
-      box-shadow: 
-        0 0 40px rgba(106, 76, 255, 0.5),
-        inset 0 0 20px rgba(255, 255, 255, 0.1);
-      border: 2px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .logo-image {
-      width: 80%;
-      height: 80%;
-      border-radius: 50%;
-      background: var(--gradient-dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .logo-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .logo-text {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-top: 15px;
-      color: var(--accent);
-      letter-spacing: 1px;
-    }
-
     .header {
       text-align: center;
       margin-bottom: 20px;
+      padding: 20px;
+      background: var(--glass-bg);
+      border-radius: 15px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
     }
 
-    .profile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .avatar {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: var(--gradient-glass-blur);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      color: white;
-      box-shadow: var(--glass-shadow);
-      border: 2px solid var(--glass-border);
-    }
-
-    .user-info {
-      text-align: left;
-      max-width: 280px;
-    }
-
-    .username {
-      font-size: 1.3rem;
+    .brand {
+      font-size: 2rem;
       font-weight: 700;
       color: var(--accent);
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
 
     .tagline {
@@ -185,49 +72,32 @@
       line-height: 1.4;
     }
 
-    /* Premium Glass Card */
     .card {
-      background: var(--gradient-glass-blur);
-      border-radius: 20px;
-      box-shadow: var(--glass-shadow);
-      width: 100%;
-      padding: 25px;
-      text-align: center;
-      margin-bottom: 20px;
+      background: var(--glass-bg);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(10px);
     }
 
-    .image-container {
-      position: relative;
-      border-radius: 15px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      box-shadow: var(--glass-shadow);
-      border: 1px solid var(--glass-border);
-    }
-
-    img {
-      width: 100%;
-      display: block;
-    }
-
     .content-title {
       color: var(--light);
-      margin: 15px 0;
+      margin-bottom: 15px;
       font-weight: 700;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
+      text-align: center;
     }
 
     .content-desc {
       color: rgba(255, 255, 255, 0.8);
       margin-bottom: 20px;
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-size: 0.9rem;
+      text-align: center;
     }
 
     .progress-section {
-      margin: 25px 0;
+      margin: 20px 0;
     }
 
     .progress-info {
@@ -243,7 +113,7 @@
       background-color: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
       overflow: hidden;
-      height: 12px;
+      height: 10px;
     }
 
     #progressBar {
@@ -255,27 +125,14 @@
     }
 
     .task {
-      margin-top: 15px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 15px;
-      padding: 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: var(--transition);
-      box-shadow: var(--glass-shadow);
       border: 1px solid var(--glass-border);
-      position: relative;
-    }
-
-    .task::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 5px;
-      height: 100%;
-      background: var(--gradient-accent);
     }
 
     .task-content {
@@ -286,29 +143,26 @@
     }
 
     .task-icon {
-      width: 45px;
-      height: 45px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       background: rgba(106, 76, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--accent);
-      font-size: 1.2rem;
-      flex-shrink: 0;
-      border: 1px solid var(--glass-border);
+      font-size: 1.1rem;
     }
 
     .task-text {
       text-align: left;
-      flex: 1;
     }
 
     .task-title {
       font-weight: 600;
       color: var(--light);
-      margin-bottom: 5px;
-      font-size: 1rem;
+      margin-bottom: 3px;
+      font-size: 0.95rem;
     }
 
     .task-desc {
@@ -320,54 +174,35 @@
       background: var(--gradient-accent);
       color: #fff;
       border: none;
-      border-radius: 12px;
-      padding: 10px 18px;
+      border-radius: 10px;
+      padding: 8px 15px;
       cursor: pointer;
-      transition: var(--transition);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      flex-shrink: 0;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: var(--transition);
     }
 
     .task button:hover {
       opacity: 0.9;
     }
 
-    .task.completed {
-      background: rgba(0, 255, 157, 0.1);
-    }
-
-    .task.completed .task-icon {
-      background: rgba(0, 255, 157, 0.2);
-      color: var(--success);
-    }
-
-    .task-check {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      color: var(--success);
-      font-size: 1.2rem;
+    .task.completed button {
+      background: var(--success);
     }
 
     #unlockBtn {
       display: none;
-      margin-top: 25px;
+      margin-top: 20px;
       background: var(--gradient-accent);
       color: #fff;
       border: none;
-      padding: 18px 30px;
-      border-radius: 50px;
-      font-size: 1.1rem;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: var(--transition);
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: var(--transition);
     }
 
     #unlockBtn:hover {
@@ -381,185 +216,72 @@
     }
 
     #countView {
-      margin-top: 15px;
       color: rgba(255, 255, 255, 0.9);
-      font-size: 0.95rem;
-      background: var(--gradient-glass-blur);
-      padding: 15px 25px;
-      border-radius: 50px;
-      box-shadow: var(--glass-shadow);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .ad-container {
-      width: 100%;
-      max-width: 450px;
-      margin: 20px auto;
+      font-size: 0.9rem;
+      background: var(--glass-bg);
+      padding: 12px 20px;
+      border-radius: 12px;
       text-align: center;
-    }
-
-    .ad-container div[data-mndazid] {
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: var(--glass-shadow);
+      margin: 15px 0;
       border: 1px solid var(--glass-border);
     }
 
     .footer {
+      margin-top: 20px;
+      padding: 15px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
       width: 100%;
       max-width: 450px;
-      margin-top: 25px;
-      text-align: center;
-      padding: 20px;
-      background: var(--gradient-glass-blur);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow);
-    }
-
-    .footer-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .copyright {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.9rem;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: var(--accent);
     }
 
     .youtube-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.8);
       text-decoration: none;
-      padding: 12px 24px;
-      border-radius: 50px;
-      background: var(--gradient-glass-blur);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: rgba(255, 0, 0, 0.1);
+      border-radius: 10px;
       transition: var(--transition);
-      border: 1px solid var(--glass-border);
     }
 
     .youtube-link:hover {
-      background: rgba(255, 0, 0, 0.1);
-      color: #fff;
+      background: rgba(255, 0, 0, 0.2);
     }
 
     .youtube-link i {
       color: #ff0000;
-      font-size: 1.3rem;
     }
 
-    .task-verification {
-      margin-top: 10px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.7);
-      text-align: left;
-    }
-
-    .verification-checkbox {
-      margin-right: 8px;
-      transform: scale(1.2);
-    }
-
-    .verification-label {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-
-    /* Animations */
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Mobile effects */
     @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
       .card {
-        padding: 20px;
-        border-radius: 15px;
-      }
-      
-      .content-title {
-        font-size: 1.4rem;
-      }
-      
-      .task {
         padding: 15px;
       }
       
-      .logo {
-        width: 100px;
-        height: 100px;
-      }
-      
-      .logo-text {
+      .brand {
         font-size: 1.8rem;
-      }
-      
-      #unlockBtn {
-        padding: 16px 25px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Loading overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loader"></div>
-    <div class="loader-text">Loading Premium Content</div>
-  </div>
-
-  <div class="container" id="mainContainer">
-    <!-- Premium Logo Section -->
-    <div class="logo-container">
-      <div class="logo">
-        <div class="logo-image">
-          <img src="https://i.postimg.cc/rsFJxvR6/20251016-233545.png" alt="Hema Tech Logo">
-        </div>
-      </div>
-      <div class="logo-text">Hema Tech</div>
-    </div>
-
+  <div class="container">
     <div class="header">
-      <div class="profile">
-        <div class="avatar">
-          <i class="fas fa-user"></i>
-        </div>
-        <div class="user-info">
-          <div class="username">Hema Tech</div>
-          <div class="tagline">Complete all tasks and verify completion to unlock premium content. Please allow pop-ups for verification.</div>
-        </div>
-      </div>
+      <div class="brand">Hema Tech</div>
+      <div class="tagline">Complete all tasks to unlock premium content. Allow pop-ups if needed.</div>
     </div>
 
     <div class="card">
-      <div class="image-container">
-        <img id="linkImage" src="https://via.placeholder.com/450x250/0a0a14/6a4cff?text=Hema+Tech+Premium" alt="Premium Content">
-      </div>
       <h2 class="content-title" id="linkTitle">Premium Content</h2>
-      <p class="content-desc" id="linkDesc">Unlock exclusive content by completing ALL tasks below. You must verify completion of each task before proceeding.</p>
+      <p class="content-desc" id="linkDesc">Complete all tasks below to unlock the content. Each task must be completed in order.</p>
 
       <div class="progress-section">
         <div class="progress-info">
@@ -574,30 +296,20 @@
       <div id="taskList">
         <!-- Tasks will be added here -->
       </div>
-      <button id="unlockBtn">Unlock Premium Content 🔓</button>
+      
+      <button id="unlockBtn">Unlock Content 🔓</button>
     </div>
 
     <div id="countView">0 Premium Unlocks</div>
 
-    <!-- Ad Container -->
-    <div class="ad-container">
-      <div data-mndazid="9160e4b4-01cf-44a1-9a70-a68ef3039f40"></div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="copyright">All copyright for Hema Tech © 2025-2026</div>
-      <div class="brand">
-        <i class="fas fa-crown"></i>
-        <span>Hema Tech</span>
-      </div>
+    <div class="footer">
+      <div>All copyright for Hema Tech © 2025-2026</div>
       <a href="https://youtube.com/@hema_tech1?si=UqCsC50yMsxuftwX" target="_blank" class="youtube-link">
         <i class="fab fa-youtube"></i>
-        <span>Hema Tech</span>
+        <span>Hema Tech YouTube</span>
       </a>
     </div>
-  </footer>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -620,7 +332,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     const linkId = urlParams.get("id");
 
-    const linkImage = document.getElementById("linkImage");
     const linkTitle = document.getElementById("linkTitle");
     const linkDesc = document.getElementById("linkDesc");
     const taskList = document.getElementById("taskList");
@@ -628,8 +339,6 @@
     const progressText = document.getElementById("progressText");
     const unlockBtn = document.getElementById("unlockBtn");
     const countView = document.getElementById("countView");
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    const mainContainer = document.getElementById("mainContainer");
 
     let tasks = [];
     let completed = 0;
@@ -637,21 +346,11 @@
     let docId = "";
     let unlockCount = 0;
     let canClickUnlock = true;
-    let userVerifiedTasks = [];
 
-    // Show content after loading
-    function showContent() {
-      setTimeout(() => {
-        loadingOverlay.classList.add('hidden');
-        mainContainer.style.display = 'block';
-      }, 1500);
-    }
-
-    // Demo data for display
+    // Demo data
     const demoData = {
-      coverUrl: "https://via.placeholder.com/450x250/0a0a14/6a4cff?text=Hema+Tech+Premium",
       title: "Premium Content",
-      description: "Unlock exclusive content by completing ALL tasks below. You must verify completion of each task before proceeding.",
+      description: "Complete all tasks below to unlock the content. Each task must be completed in order.",
       destination: "https://www.example.com",
       tasks: [
         { 
@@ -659,30 +358,24 @@
           typeLabel: "Subscribe to Channel", 
           link: "https://youtube.com/@hema_tech1", 
           done: false,
-          verified: false,
           icon: "fab fa-youtube",
-          description: "Subscribe to Hema Tech YouTube channel",
-          verificationText: "I have subscribed to the channel"
+          description: "Subscribe to Hema Tech YouTube channel"
         },
         { 
           id: "task2",
           typeLabel: "Watch Video", 
           link: "https://www.example.com/video1", 
           done: false,
-          verified: false,
           icon: "fas fa-play",
-          description: "Watch the required video until the end",
-          verificationText: "I have watched the video completely"
+          description: "Watch the required video until the end"
         },
         { 
           id: "task3",
           typeLabel: "Join Group", 
           link: "https://www.example.com/group", 
           done: false,
-          verified: false,
           icon: "fas fa-users",
-          description: "Join our Telegram group",
-          verificationText: "I have joined the group"
+          description: "Join our Telegram group"
         }
       ],
       unlockCount: 42
@@ -690,7 +383,6 @@
 
     // Load data
     function loadData(data) {
-      linkImage.src = data.coverUrl;
       linkTitle.textContent = data.title;
       linkDesc.textContent = data.description;
       destination = data.destination;
@@ -699,14 +391,13 @@
 
       countView.textContent = `${unlockCount} Premium Unlocks`;
       renderTasks();
-      showContent();
     }
 
     // Use demo data if there's no link
     if (!linkId) {
       setTimeout(() => {
         loadData(demoData);
-      }, 1500);
+      }, 500);
     } else if (linkId) {
       const q = query(collection(db, "links"), where("idField", "==", linkId));
       getDocs(q).then(snapshot => {
@@ -716,18 +407,17 @@
           docId = docSnap.id;
           loadData(data);
         } else {
-          linkTitle.textContent = "The link does not exist";
-          showContent();
+          linkTitle.textContent = "Link not found";
         }
       }).catch(error => {
         console.error("Error loading data:", error);
-        showContent();
+        loadData(demoData);
       });
     }
 
     function renderTasks() {
       taskList.innerHTML = "";
-      completed = 0;
+      completed = tasks.filter(t => t.done).length;
 
       tasks.forEach((task, index) => {
         const div = document.createElement("div");
@@ -738,22 +428,6 @@
           div.style.display = "none";
         }
 
-        let actionContent = '';
-        if (task.done && task.verified) {
-          actionContent = '<div class="task-check">✓</div>';
-        } else if (task.done && !task.verified) {
-          actionContent = `
-            <div class="task-verification">
-              <label class="verification-label">
-                <input type="checkbox" class="verification-checkbox" data-task-id="${task.id}" onchange="verifyTask('${task.id}')">
-                <span>${task.verificationText || "I have completed this task"}</span>
-              </label>
-            </div>
-          `;
-        } else {
-          actionContent = `<button onclick="startTask(${index})">Start</button>`;
-        }
-
         div.innerHTML = `
           <div class="task-content">
             <div class="task-icon">
@@ -761,17 +435,14 @@
             </div>
             <div class="task-text">
               <div class="task-title">${task.typeLabel || "Task"}</div>
-              <div class="task-desc">${task.description || "Complete this task to continue"}</div>
+              <div class="task-desc">${task.description || "Complete this task"}</div>
             </div>
           </div>
-          ${actionContent}
+          ${task.done ? 
+            '<button style="background: #00ff9d;">✓ Completed</button>' : 
+            `<button onclick="startTask(${index})">Start</button>`
+          }
         `;
-        
-        // Count completed and verified tasks
-        if (task.done && task.verified) {
-          completed++;
-        }
-        
         taskList.appendChild(div);
       });
 
@@ -780,7 +451,7 @@
       progressBar.style.width = progress + "%";
       progressText.textContent = `${Math.round(progress)}%`;
 
-      // Show unlock button only when ALL tasks are completed AND verified
+      // Show unlock button only when ALL tasks are completed
       if (completed === tasks.length && tasks.length > 0) {
         unlockBtn.style.display = "block";
       } else {
@@ -792,7 +463,7 @@
       const task = tasks[index];
       if (!task) return;
       
-      // Mark task as done (not verified yet)
+      // Mark task as done
       task.done = true;
       
       // Open task link
@@ -800,50 +471,36 @@
         window.open(task.link, "_blank");
       }
       
-      // Re-render tasks
-      renderTasks();
-      
-      // Show alert about verification
+      // Wait 10 seconds before showing next task
       setTimeout(() => {
-        alert("Please complete the task, then check the verification box to confirm completion.");
-      }, 500);
-    };
-
-    window.verifyTask = function(taskId) {
-      const taskIndex = tasks.findIndex(t => t.id === taskId);
-      if (taskIndex === -1) return;
-      
-      const checkbox = document.querySelector(`.verification-checkbox[data-task-id="${taskId}"]`);
-      if (checkbox) {
-        tasks[taskIndex].verified = checkbox.checked;
         renderTasks();
-      }
+      }, 10000);
     };
 
-    // Function to prevent spam on the Unlock button
+    // Handle unlock button click
     function handleUnlockClick() {
       if (!canClickUnlock) {
         return;
       }
       
-      // Check if all tasks are verified
-      const allVerified = tasks.every(task => task.done && task.verified);
-      if (!allVerified) {
-        alert("Please complete and verify ALL tasks before unlocking!");
+      // Check if all tasks are completed
+      const allCompleted = tasks.every(task => task.done);
+      if (!allCompleted) {
+        alert("Please complete ALL tasks before unlocking!");
         return;
       }
       
-      // Disable the button for 10 seconds
+      // Disable button for 10 seconds
       canClickUnlock = false;
       unlockBtn.disabled = true;
       unlockBtn.textContent = "⏳ Please wait 10 seconds";
       
-      // Open the link
+      // Open destination link
       if (destination) {
         window.open(destination, "_blank");
       }
       
-      // Update the counter in the database
+      // Update counter
       if (docId) {
         const docRef = doc(db, "links", docId);
         updateDoc(docRef, { unlockCount: increment(1) })
@@ -855,20 +512,18 @@
             console.error("Error updating unlock count:", error);
           });
       } else {
-        // In case of demo data
         unlockCount++;
         countView.textContent = `${unlockCount} Premium Unlocks`;
       }
       
-      // Re-enable the button after 10 seconds
+      // Re-enable button
       setTimeout(() => {
         canClickUnlock = true;
         unlockBtn.disabled = false;
-        unlockBtn.textContent = "Unlock Premium Content 🔓";
+        unlockBtn.textContent = "Unlock Content 🔓";
       }, 10000);
     }
 
-    // Add event listener for the button with spam prevention
     unlockBtn.addEventListener("click", handleUnlockClick);
   </script>
 </body>

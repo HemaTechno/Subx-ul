@@ -1,102 +1,557 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تنفيذ المهمة</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delta Android Keysystem</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1a1a2e;
+      --secondary: #16213e;
+      --accent: #6a4cff;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --success: #28a745;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --border-radius: 12px;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap" rel="stylesheet">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    }
 
-<style>
-body{
-background:#0f0f23;
-color:#fff;
-font-family:Cairo;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
-.box{
-background:#1a1a2e;
-padding:30px;
-border-radius:15px;
-text-align:center;
-width:90%;
-max-width:420px;
-}
-button{
-background:#6a4cff;
-color:white;
-border:none;
-padding:14px 25px;
-font-size:16px;
-border-radius:10px;
-cursor:pointer;
-margin-top:20px;
-}
-button:disabled{opacity:.6}
-</style>
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 30px 25px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .content {
+      padding: 30px 25px;
+    }
+
+    .progress-section {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .progress-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .progress-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .progress-text {
+      font-size: 14px;
+      color: var(--gray);
+      margin-top: 5px;
+    }
+
+    .message-box {
+      background: #f8f9fa;
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #495057;
+    }
+
+    .message-box strong {
+      color: var(--primary);
+    }
+
+    .tasks-container {
+      margin-bottom: 30px;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      margin-bottom: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+
+    .task:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border-color: #dee2e6;
+    }
+
+    .task.completed {
+      background: #e8f5e9;
+      border-color: #c8e6c9;
+    }
+
+    .task-icon {
+      margin-right: 15px;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .task.completed .task-icon {
+      background: #4caf50;
+      color: white;
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-title {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .task-desc {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .task-checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #ced4da;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .task.completed .task-checkbox {
+      background: #4caf50;
+      border-color: #4caf50;
+      color: white;
+    }
+
+    .task-checkbox i {
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .task.completed .task-checkbox i {
+      opacity: 1;
+    }
+
+    .continue-section {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .continue-btn {
+      display: inline-block;
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent) 0%, #8a6eff 100%);
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(106, 76, 255, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .continue-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(106, 76, 255, 0.4);
+    }
+
+    .continue-btn:disabled {
+      background: #ced4da;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .alternative-section {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .alternative-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      margin-left: 5px;
+    }
+
+    .alternative-link:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      font-size: 13px;
+      color: var(--gray);
+      border-top: 1px solid #e9ecef;
+    }
+
+    .footer-link {
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    .image-container {
+      width: 100%;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      display: none; /* مخفي افتراضياً */
+    }
+
+    .image-container.show {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container {
+        border-radius: 10px;
+      }
+      
+      .header {
+        padding: 25px 20px;
+      }
+      
+      .title {
+        font-size: 24px;
+      }
+      
+      .content {
+        padding: 25px 20px;
+      }
+      
+      .footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Delta Android Keysystem</h1>
+      <p class="subtitle">Premium Access Unlock</p>
+    </div>
+    
+    <div class="content">
+      <!-- صورة إذا كانت موجودة -->
+      <div class="image-container" id="imageContainer">
+        <!-- سيتم إضافة الصورة ديناميكياً -->
+      </div>
+      
+      <div class="progress-section">
+        <div class="progress-title">Completed</div>
+        <div class="progress-number" id="completedCount">0</div>
+        <div class="progress-text">of <span id="totalTasks">1</span> task</div>
+      </div>
+      
+      <div class="message-box">
+        <strong>Important:</strong> Click continue, pop-ups/ads may show and they can be annoying, but they directly support the creators of this link.
+      </div>
+      
+      <div class="tasks-container" id="tasksContainer">
+        <!-- المهام ستتم إضافتها هنا ديناميكياً -->
+      </div>
+      
+      <div class="continue-section">
+        <button class="continue-btn" id="continueBtn" disabled>
+          Continue
+        </button>
+        
+        <div class="alternative-section">
+          or continue with
+          <a href="#" class="alternative-link">lootlabs</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <a href="#" class="footer-link">Report</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+      <a href="#" class="footer-link">Privacy Policy</a>
+    </div>
+  </div>
 
-<div class="box">
-<h2>مهمة مشاهدة إعلان</h2>
-<p>اضغط الزر لبدء المهمة</p>
-<button id="startBtn">ابدأ المهمة</button>
-</div>
+  <script>
+    // بيانات المهام
+    const tasks = [
+      {
+        id: 1,
+        title: "Watch tutorial",
+        description: "Watch the required tutorial video",
+        completed: false,
+        link: "https://www.example.com/tutorial",
+        icon: "fas fa-play-circle"
+      },
+      {
+        id: 2,
+        title: "Visit shop",
+        description: "Visit our official shop",
+        completed: true,
+        link: "https://www.example.com/shop",
+        icon: "fas fa-shopping-cart"
+      },
+      {
+        id: 3,
+        title: "Continue",
+        description: "Click the continue button",
+        completed: false,
+        link: null,
+        icon: "fas fa-arrow-right"
+      }
+    ];
 
-<!-- 🔹 SwiftLnx Config -->
-<script>
-var app_url = 'https://swiftlnx.com/';
-var app_api_token = 'baca75b30667a4de9ccc05850ddfea6ecb2abfa2';
-var app_advert = 2;
-var app_domains = ["https://task.subx.click/"];
-</script>
-<script src="//swiftlnx.com/js/full-page-script.js"></script>
+    // رابط الوجهة النهائي
+    const destinationUrl = "https://www.example.com/unlock";
 
-<!-- 🔹 Firebase -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    // عناصر DOM
+    const tasksContainer = document.getElementById('tasksContainer');
+    const continueBtn = document.getElementById('continueBtn');
+    const completedCount = document.getElementById('completedCount');
+    const totalTasks = document.getElementById('totalTasks');
+    const imageContainer = document.getElementById('imageContainer');
 
-const firebaseConfig = {
-apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
-authDomain: "hhhhhh-d4fb8.firebaseapp.com",
-projectId: "hhhhhh-d4fb8"
-};
+    // دالة لتحميل صورة (اختيارية)
+    function loadOptionalImage() {
+      // يمكنك تغيير هذا الرابط إلى رابط الصورة الخاصة بك
+      const imageUrl = "https://via.placeholder.com/450x250/6a4cff/ffffff?text=Delta+Android";
+      
+      // إذا كان هناك رابط صورة، اعرضها
+      if (imageUrl && imageUrl.trim() !== '') {
+        imageContainer.classList.add('show');
+        imageContainer.innerHTML = `<img src="${imageUrl}" alt="Delta Android Keysystem">`;
+      }
+    }
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    // دالة لتقدير المهام المكتملة
+    function updateProgress() {
+      const completedTasks = tasks.filter(task => task.completed).length;
+      completedCount.textContent = completedTasks;
+      totalTasks.textContent = tasks.length;
+      
+      // تفعيل زر Continue إذا اكتملت جميع المهام
+      if (completedTasks === tasks.length) {
+        continueBtn.disabled = false;
+        continueBtn.classList.add('pulse');
+      } else {
+        continueBtn.disabled = true;
+        continueBtn.classList.remove('pulse');
+      }
+    }
 
-const btn = document.getElementById("startBtn");
+    // دالة لعرض المهام
+    function renderTasks() {
+      tasksContainer.innerHTML = '';
+      
+      tasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.className = `task ${task.completed ? 'completed' : ''}`;
+        taskElement.innerHTML = `
+          <div class="task-icon">
+            <i class="${task.icon}"></i>
+          </div>
+          <div class="task-content">
+            <div class="task-title">${task.title}</div>
+            <div class="task-desc">${task.description}</div>
+          </div>
+          <div class="task-checkbox" data-task-id="${task.id}">
+            <i class="fas fa-check"></i>
+          </div>
+        `;
+        
+        // إضافة حدث النقر على خانة الاختيار
+        const checkbox = taskElement.querySelector('.task-checkbox');
+        checkbox.addEventListener('click', () => toggleTask(task.id));
+        
+        // إذا كانت المهمة تحتوي على رابط، افتحه عند النقر
+        if (task.link && !task.completed) {
+          taskElement.style.cursor = 'pointer';
+          taskElement.addEventListener('click', (e) => {
+            if (!e.target.closest('.task-checkbox')) {
+              window.open(task.link, '_blank');
+            }
+          });
+        }
+        
+        tasksContainer.appendChild(taskElement);
+      });
+    }
 
-// ID بسيط للمستخدم
-let userId = localStorage.getItem("swiftUser");
-if(!userId){
-userId = "u_" + Math.random().toString(36).substr(2,9);
-localStorage.setItem("swiftUser", userId);
-}
+    // دالة لتغيير حالة المهمة
+    function toggleTask(taskId) {
+      const taskIndex = tasks.findIndex(task => task.id === taskId);
+      if (taskIndex !== -1) {
+        tasks[taskIndex].completed = !tasks[taskIndex].completed;
+        renderTasks();
+        updateProgress();
+      }
+    }
 
-btn.onclick = async () => {
-btn.disabled = true;
-btn.innerText = "جارٍ عرض الإعلان...";
+    // دالة للاستمرار
+    function handleContinue() {
+      if (!continueBtn.disabled) {
+        // عرض رسالة تأكيد
+        if (confirm("Are you sure you want to continue? Pop-ups/ads may appear.")) {
+          // فتح رابط الوجهة
+          window.open(destinationUrl, '_blank');
+          
+          // عرض رسالة نجاح
+          alert("Thank you for completing all tasks! Redirecting...");
+          
+          // تعطيل الزر مؤقتاً لمنع النقر المتكرر
+          continueBtn.disabled = true;
+          continueBtn.textContent = "Redirecting...";
+          
+          setTimeout(() => {
+            continueBtn.textContent = "Completed!";
+          }, 2000);
+        }
+      }
+    }
 
-// ⏳ انتظر وقت الإعلان
-setTimeout(async ()=>{
-await setDoc(doc(db,"tasks_done",userId),{
-done:true,
-time:Date.now()
-});
+    // تهيئة التطبيق
+    function init() {
+      loadOptionalImage();
+      renderTasks();
+      updateProgress();
+      
+      // إضافة حدث النقر على زر Continue
+      continueBtn.addEventListener('click', handleContinue);
+      
+      // تمكين المهمة الثالثة (Continue) تلقائياً عند اكتمال المهمتين الأوليين
+      const firstTwoCompleted = tasks[0].completed && tasks[1].completed;
+      if (firstTwoCompleted && !tasks[2].completed) {
+        tasks[2].completed = true;
+        renderTasks();
+        updateProgress();
+      }
+    }
 
-// رجوع بعد التنفيذ
-window.location.href = "success.html";
-
-}, 15000); // لازم يكون أطول من الإعلان
-};
-</script>
-
+    // بدء التطبيق
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>

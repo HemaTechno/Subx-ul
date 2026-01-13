@@ -1,43 +1,49 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script><script>linkvertise(1264869, {whitelist: [], blacklist: [""]});</script>
   <meta charset="UTF-8">
-  <title>Task Unlock Page</title>
+  <title>Task Unlock</title>
+
   <style>
     body {
-      font-family: Arial;
       background: #111;
       color: #fff;
+      font-family: Arial;
       text-align: center;
       padding: 20px;
     }
+
     .task {
-      background: #1e1e1e;
+      background: #1f1f1f;
       padding: 15px;
-      margin: 10px 0;
+      margin: 10px auto;
       border-radius: 10px;
+      max-width: 300px;
     }
+
     button {
       padding: 10px 20px;
-      border: none;
       border-radius: 6px;
-      cursor: pointer;
+      border: none;
       font-size: 16px;
+      cursor: pointer;
     }
+
     .task-btn {
       background: #2196f3;
-      color: #fff;
+      color: white;
     }
+
     .task-btn:disabled {
       background: gray;
       cursor: not-allowed;
     }
+
     #unlockBtn {
-      margin-top: 20px;
-      background: #4caf50;
-      color: #fff;
       display: none;
+      background: #4caf50;
+      color: white;
+      margin-top: 20px;
     }
   </style>
 
@@ -47,87 +53,78 @@
     linkvertise(1264869, { whitelist: [], blacklist: [""] });
   </script>
 </head>
+
 <body>
 
-<h2>أكمل المهام لفتح المحتوى</h2>
+<h2>أكمل 3 مهام لفتح المحتوى</h2>
 
 <div class="task">
   <p>المهمة الأولى</p>
-  <button class="task-btn" onclick="startTask(1, 'https://task.subx.click/delta703')">
-    فتح المهمة
-  </button>
+  <button class="task-btn" onclick="startTask(1)">فتح المهمة</button>
 </div>
 
 <div class="task">
   <p>المهمة الثانية</p>
-  <button class="task-btn" onclick="startTask(2, 'https://task.subx.click/delta703')">
-    فتح المهمة
-  </button>
+  <button class="task-btn" onclick="startTask(2)">فتح المهمة</button>
 </div>
 
 <div class="task">
   <p>المهمة الثالثة</p>
-  <button class="task-btn" onclick="startTask(3, 'https://task.subx.click/delta703')">
-    فتح المهمة
-  </button>
+  <button class="task-btn" onclick="startTask(3)">فتح المهمة</button>
 </div>
 
-<button id="unlockBtn" onclick="unlock()">
-  🔓 Unlocked
-</button>
+<button id="unlockBtn" onclick="unlock()">🔓 Unlocked</button>
 
 <script>
-  const REQUIRED_TASKS = 3;
-  const FINAL_LINK = "https://example.com/unlocked-page";
+  const TASK_LINK = "https://task.subx.click/delta703"; // رابط كل المهام
+  const FINAL_UNLOCK_LINK = "https://example.com/unlock"; // غيره برابط الـ unlock
+  const TASKS_COUNT = 3;
+  const WAIT_TIME = 10000; // 10 ثواني
 
-  function startTask(taskId, link) {
-    if (localStorage.getItem("task_" + taskId)) {
-      alert("المهمة دي متسجلة قبل كده");
+  function startTask(id) {
+    if (localStorage.getItem("task_" + id)) {
+      alert("المهمة دي خلصتها قبل كده");
       return;
     }
 
-    window.open(link, "_blank");
-
-    alert("انتظر 10 ثواني لإكمال المهمة");
+    window.open(TASK_LINK, "_blank");
+    alert("استنى 10 ثواني عشان تتسجل المهمة");
 
     setTimeout(() => {
-      localStorage.setItem("task_" + taskId, "done");
-      disableTaskButton(taskId);
+      localStorage.setItem("task_" + id, "done");
+      disableButton(id);
       checkUnlock();
       alert("تم تسجيل المهمة ✅");
-    }, 10000);
+    }, WAIT_TIME);
   }
 
-  function disableTaskButton(taskId) {
-    const buttons = document.querySelectorAll(".task-btn");
-    buttons[taskId - 1].disabled = true;
-    buttons[taskId - 1].innerText = "تمت";
+  function disableButton(id) {
+    const btn = document.querySelectorAll(".task-btn")[id - 1];
+    btn.disabled = true;
+    btn.innerText = "تمت";
   }
 
   function checkUnlock() {
-    let completed = 0;
-    for (let i = 1; i <= REQUIRED_TASKS; i++) {
-      if (localStorage.getItem("task_" + i)) {
-        completed++;
-      }
+    let done = 0;
+    for (let i = 1; i <= TASKS_COUNT; i++) {
+      if (localStorage.getItem("task_" + i)) done++;
     }
 
-    if (completed === REQUIRED_TASKS) {
+    if (done === TASKS_COUNT) {
       document.getElementById("unlockBtn").style.display = "inline-block";
     }
   }
 
   function unlock() {
     localStorage.clear();
-    window.open(FINAL_LINK, "_blank");
+    window.open(FINAL_UNLOCK_LINK, "_blank");
     location.reload();
   }
 
-  // عند تحميل الصفحة
   window.onload = () => {
-    for (let i = 1; i <= REQUIRED_TASKS; i++) {
+    for (let i = 1; i <= TASKS_COUNT; i++) {
       if (localStorage.getItem("task_" + i)) {
-        disableTaskButton(i);
+        disableButton(i);
       }
     }
     checkUnlock();

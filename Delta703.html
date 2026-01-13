@@ -1,133 +1,533 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script><script>linkvertise(1264869, {whitelist: [], blacklist: [""]});</script>
   <meta charset="UTF-8">
-  <title>Task Unlock</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فتح المهام</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
+    :root {
+      --primary: #2196f3;
+      --success: #4caf50;
+      --dark: #111;
+      --darker: #1f1f1f;
+      --text: #fff;
+      --disabled: #666;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      background: #111;
-      color: #fff;
-      font-family: Arial;
+      background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
       padding: 20px;
+      min-height: 100vh;
+      direction: rtl;
     }
-
-    .task {
-      background: #1f1f1f;
-      padding: 15px;
-      margin: 10px auto;
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(31, 31, 31, 0.7);
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    h1 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+    
+    .progress-container {
+      background: var(--darker);
       border-radius: 10px;
-      max-width: 300px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 400px;
     }
-
-    button {
-      padding: 10px 20px;
+    
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    
+    .progress-bar {
+      height: 12px;
+      background: #333;
       border-radius: 6px;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
+      overflow: hidden;
     }
-
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #21cbf3);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    
+    .tasks-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+    
+    .task {
+      background: rgba(31, 31, 31, 0.8);
+      padding: 25px 20px;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .task:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      border-color: var(--primary);
+    }
+    
+    .task-number {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(33, 150, 243, 0.2);
+      color: var(--primary);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    .task-title {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      color: #e0e0e0;
+    }
+    
     .task-btn {
-      background: #2196f3;
+      background: linear-gradient(135deg, var(--primary), #0d8bf2);
       color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 10px;
     }
-
+    
+    .task-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0d8bf2, var(--primary));
+      box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+    }
+    
     .task-btn:disabled {
-      background: gray;
+      background: var(--disabled);
       cursor: not-allowed;
+      opacity: 0.7;
     }
-
+    
+    .task-btn.completed {
+      background: linear-gradient(135deg, var(--success), #45a049);
+    }
+    
     #unlockBtn {
-      display: none;
-      background: #4caf50;
+      background: linear-gradient(135deg, var(--success), #45a049);
       color: white;
-      margin-top: 20px;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 10px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      margin: 30px auto;
+      display: none;
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+    
+    #unlockBtn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
+    }
+    
+    .unlock-icon {
+      margin-left: 10px;
+      font-size: 1.5rem;
+    }
+    
+    .timer {
+      margin-top: 15px;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      color: #777;
+      font-size: 0.9rem;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .tasks-container {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .task {
+        padding: 20px 15px;
+      }
+    }
+    
+    /* رسائل التنبيه المخصصة */
+    .alert-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .alert-box {
+      background: var(--darker);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      border: 2px solid var(--primary);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    
+    .alert-box.show {
+      transform: scale(1);
+    }
+    
+    .alert-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .alert-icon {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    
+    .alert-message {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+    }
+    
+    .alert-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
     }
   </style>
-
-  <!-- Linkvertise -->
-
 </head>
 
 <body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-tasks"></i> فتح المهام</h1>
+      <p class="subtitle">أكمل المهام الثلاثة لفتح المحتوى المميز</p>
+      
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>التقدم: <span id="progressCount">0/3</span></span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </header>
+    
+    <div class="tasks-container">
+      <div class="task">
+        <div class="task-number">1</div>
+        <h3 class="task-title">المهمة الأولى</h3>
+        <p>انقر على الزر لفتح المهمة والإنتظار 10 ثوانٍ</p>
+        <button class="task-btn" onclick="startTask(1)">
+          <i class="fas fa-external-link-alt"></i> فتح المهمة
+        </button>
+        <div id="timer1" class="timer" style="display: none;"></div>
+      </div>
+      
+      <div class="task">
+        <div class="task-number">2</div>
+        <h3 class="task-title">المهمة الثانية</h3>
+        <p>انقر على الزر لفتح المهمة والإنتظار 10 ثوانٍ</p>
+        <button class="task-btn" onclick="startTask(2)">
+          <i class="fas fa-external-link-alt"></i> فتح المهمة
+        </button>
+        <div id="timer2" class="timer" style="display: none;"></div>
+      </div>
+      
+      <div class="task">
+        <div class="task-number">3</div>
+        <h3 class="task-title">المهمة الثالثة</h3>
+        <p>انقر على الزر لفتح المهمة والإنتظار 10 ثوانٍ</p>
+        <button class="task-btn" onclick="startTask(3)">
+          <i class="fas fa-external-link-alt"></i> فتح المهمة
+        </button>
+        <div id="timer3" class="timer" style="display: none;"></div>
+      </div>
+    </div>
+    
+    <button id="unlockBtn" onclick="unlock()">
+      <i class="fas fa-lock-open unlock-icon"></i> فتح المحتوى
+    </button>
+    
+    <div class="footer">
+      <p>بمجرد إكمال جميع المهام، سيتم تفعيل زر فتح المحتوى</p>
+      <p>يمكنك إعادة تعيين التقدم عن طريق مسح بيانات المتصفح</p>
+    </div>
+  </div>
+  
+  <!-- نافذة التنبيه المخصصة -->
+  <div class="alert-overlay" id="alertOverlay">
+    <div class="alert-box" id="alertBox">
+      <div class="alert-icon" id="alertIcon">
+        <i class="fas fa-info-circle"></i>
+      </div>
+      <div class="alert-message" id="alertMessage">رسالة التنبيه</div>
+      <button class="alert-btn" onclick="closeAlert()">موافق</button>
+    </div>
+  </div>
 
-<h2>أكمل 3 مهام لفتح المحتوى</h2>
-
-<div class="task">
-  <p>المهمة الأولى</p>
-  <button class="task-btn" onclick="startTask(1)">فتح المهمة</button>
-</div>
-
-<div class="task">
-  <p>المهمة الثانية</p>
-  <button class="task-btn" onclick="startTask(2)">فتح المهمة</button>
-</div>
-
-<div class="task">
-  <p>المهمة الثالثة</p>
-  <button class="task-btn" onclick="startTask(3)">فتح المهمة</button>
-</div>
-
-<button id="unlockBtn" onclick="unlock()">🔓 Unlocked</button>
-
-<script>
-  const TASK_LINK = "https://task.subx.click/delta703"; // رابط كل المهام
-  const FINAL_UNLOCK_LINK = "https://example.com/unlock"; // غيره برابط الـ unlock
-  const TASKS_COUNT = 3;
-  const WAIT_TIME = 10000; // 10 ثواني
-
-  function startTask(id) {
-    if (localStorage.getItem("task_" + id)) {
-      alert("المهمة دي خلصتها قبل كده");
-      return;
+  <script>
+    // الإعدادات
+    const TASK_LINK = "https://task.subx.click/delta703"; // رابط المهمة
+    const FINAL_UNLOCK_LINK = "https://example.com/unlock"; // رابط المحتوى بعد الإكمال
+    const TASKS_COUNT = 3;
+    const WAIT_TIME = 10000; // 10 ثواني
+    
+    // مؤقتات المهام
+    let taskTimers = {};
+    
+    // تحديث شريط التقدم
+    function updateProgress() {
+      let done = 0;
+      for (let i = 1; i <= TASKS_COUNT; i++) {
+        if (localStorage.getItem("task_" + i)) done++;
+      }
+      
+      const progressCount = document.getElementById("progressCount");
+      const progressPercent = document.getElementById("progressPercent");
+      const progressFill = document.getElementById("progressFill");
+      
+      const percent = Math.round((done / TASKS_COUNT) * 100);
+      
+      progressCount.textContent = `${done}/${TASKS_COUNT}`;
+      progressPercent.textContent = `${percent}%`;
+      progressFill.style.width = `${percent}%`;
+      
+      return done;
     }
-
-    window.open(TASK_LINK, "_blank");
-    alert("استنى 10 ثواني عشان تتسجل المهمة");
-
-    setTimeout(() => {
+    
+    // عرض رسالة تنبيه مخصصة
+    function showAlert(message, isSuccess = false) {
+      const alertOverlay = document.getElementById("alertOverlay");
+      const alertBox = document.getElementById("alertBox");
+      const alertMessage = document.getElementById("alertMessage");
+      const alertIcon = document.getElementById("alertIcon");
+      
+      alertMessage.textContent = message;
+      
+      if (isSuccess) {
+        alertIcon.innerHTML = '<i class="fas fa-check-circle" style="color:#4caf50"></i>';
+      } else {
+        alertIcon.innerHTML = '<i class="fas fa-info-circle" style="color:#2196f3"></i>';
+      }
+      
+      alertOverlay.classList.add("show");
+      setTimeout(() => {
+        alertBox.classList.add("show");
+      }, 10);
+    }
+    
+    // إغلاق رسالة التنبيه
+    function closeAlert() {
+      const alertOverlay = document.getElementById("alertOverlay");
+      const alertBox = document.getElementById("alertBox");
+      
+      alertBox.classList.remove("show");
+      setTimeout(() => {
+        alertOverlay.classList.remove("show");
+      }, 300);
+    }
+    
+    // بدء المهمة
+    function startTask(id) {
+      // التحقق إذا كانت المهمة مكتملة بالفعل
+      if (localStorage.getItem("task_" + id)) {
+        showAlert("المهمة " + id + " مكتملة بالفعل!");
+        return;
+      }
+      
+      // فتح رابط المهمة في نافذة جديدة
+      window.open(TASK_LINK, "_blank");
+      
+      // عرض رسالة الانتظار
+      showAlert("يرجى الانتظار 10 ثوانٍ حتى يتم تسجيل المهمة...");
+      
+      // تعطيل الزر وبدء المؤقت
+      const btn = document.querySelectorAll(".task-btn")[id - 1];
+      const timerElement = document.getElementById("timer" + id);
+      
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+      
+      timerElement.style.display = "block";
+      
+      // بدء عد تنازلي
+      let timeLeft = 10;
+      taskTimers[id] = setInterval(() => {
+        timerElement.textContent = `الوقت المتبقي: ${timeLeft} ثواني`;
+        timeLeft--;
+        
+        if (timeLeft < 0) {
+          clearInterval(taskTimers[id]);
+          completeTask(id);
+        }
+      }, 1000);
+    }
+    
+    // إكمال المهمة
+    function completeTask(id) {
+      // حفظ المهمة كمكتملة
       localStorage.setItem("task_" + id, "done");
-      disableButton(id);
+      
+      // تحديث واجهة المستخدم
+      const btn = document.querySelectorAll(".task-btn")[id - 1];
+      const timerElement = document.getElementById("timer" + id);
+      
+      btn.disabled = true;
+      btn.classList.add("completed");
+      btn.innerHTML = '<i class="fas fa-check"></i> تمت المهمة';
+      
+      timerElement.style.display = "none";
+      
+      // تحديث التقدم والتحقق من إمكانية الفتح
+      updateProgress();
       checkUnlock();
-      alert("تم تسجيل المهمة ✅");
-    }, WAIT_TIME);
-  }
-
-  function disableButton(id) {
-    const btn = document.querySelectorAll(".task-btn")[id - 1];
-    btn.disabled = true;
-    btn.innerText = "تمت";
-  }
-
-  function checkUnlock() {
-    let done = 0;
-    for (let i = 1; i <= TASKS_COUNT; i++) {
-      if (localStorage.getItem("task_" + i)) done++;
+      
+      // عرض رسالة النجاح
+      showAlert(`تم إكمال المهمة ${id} بنجاح! ✅`, true);
     }
-
-    if (done === TASKS_COUNT) {
-      document.getElementById("unlockBtn").style.display = "inline-block";
-    }
-  }
-
-  function unlock() {
-    localStorage.clear();
-    window.open(FINAL_UNLOCK_LINK, "_blank");
-    location.reload();
-  }
-
-  window.onload = () => {
-    for (let i = 1; i <= TASKS_COUNT; i++) {
-      if (localStorage.getItem("task_" + i)) {
-        disableButton(i);
+    
+    // التحقق من إمكانية فتح المحتوى
+    function checkUnlock() {
+      const doneTasks = updateProgress();
+      
+      if (doneTasks === TASKS_COUNT) {
+        const unlockBtn = document.getElementById("unlockBtn");
+        unlockBtn.style.display = "block";
+        
+        // عرض رسالة تهنئة
+        setTimeout(() => {
+          showAlert("تهانينا! لقد أكملت جميع المهام. يمكنك الآن فتح المحتوى.", true);
+        }, 500);
       }
     }
-    checkUnlock();
-  };
-</script>
-
+    
+    // فتح المحتوى
+    function unlock() {
+      // فتح رابط المحتوى
+      window.open(FINAL_UNLOCK_LINK, "_blank");
+      
+      // عرض رسالة
+      showAlert("يتم الآن فتح المحتوى المميز...", true);
+      
+      // إعادة تعيين التقدم بعد 3 ثوانٍ
+      setTimeout(() => {
+        // مسح بيانات التخزين المحلي
+        for (let i = 1; i <= TASKS_COUNT; i++) {
+          localStorage.removeItem("task_" + i);
+        }
+        
+        // إعادة تحميل الصفحة
+        location.reload();
+      }, 3000);
+    }
+    
+    // تهيئة الصفحة عند التحميل
+    window.onload = () => {
+      // تعيين حالة الأزرار بناءً على التخزين المحلي
+      for (let i = 1; i <= TASKS_COUNT; i++) {
+        if (localStorage.getItem("task_" + i)) {
+          const btn = document.querySelectorAll(".task-btn")[i - 1];
+          btn.disabled = true;
+          btn.classList.add("completed");
+          btn.innerHTML = '<i class="fas fa-check"></i> تمت المهمة';
+        }
+      }
+      
+      // تحديث شريط التقدم والتحقق من الإطلاق
+      updateProgress();
+      checkUnlock();
+    };
+  </script>
+  
+  <!-- إضافة Linkvertise script في نهاية الجسم -->
+  <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
+  <script>
+    // تهيئة Linkvertise بعد تحميل الصفحة
+    window.addEventListener('load', function() {
+      linkvertise(1264869, {whitelist: [], blacklist: [""]});
+    });
+  </script>
 </body>
 </html>

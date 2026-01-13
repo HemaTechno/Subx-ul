@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script><script>linkvertise(1264869, {whitelist: [], blacklist: [""]});</script>
+ <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script><script>linkvertise(1264869, {whitelist: [], blacklist: [""]});</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Subx</title>
@@ -312,9 +313,6 @@
     </div>
   </div>
 
-  <!-- Linkvertise script -->
-  <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, query, where, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
@@ -481,7 +479,7 @@
       }, 10000);
     };
 
-    // Handle unlock button click with Linkvertise
+    // Handle unlock button click
     function handleUnlockClick() {
       if (!canClickUnlock) {
         return;
@@ -499,80 +497,9 @@
       unlockBtn.disabled = true;
       unlockBtn.textContent = "⏳ Please wait 10 seconds";
       
-      // Use Linkvertise to open destination
+      // Open destination link
       if (destination) {
-        try {
-          // Initialize Linkvertise with your campaign ID
-          linkvertise(1264869, {
-            whitelist: [],
-            blacklist: [""],
-            force: true
-          }).then(() => {
-            // After Linkvertise completes, open the actual destination
-            window.open(destination, "_blank");
-          }).catch(error => {
-            console.error("Linkvertise error:", error);
-            // Fallback: open destination directly if Linkvertise fails
-            window.open(destination, "_blank");
-          });
-        } catch (error) {
-          console.error("Error with Linkvertise:", error);
-          window.open(destination, "_blank");
-        }
-      }
-      
-      // Update counter
-      if (docId) {
-        const docRef = doc(db, "links", docId);
-        updateDoc(docRef, { unlockCount: increment(1) })
-          .then(() => {
-            unlockCount++;
-            countView.textContent = `${unlockCount} Premium Unlocks`;
-          })
-          .catch(error => {
-            console.error("Error updating unlock count:", error);
-          });
-      } else {
-        unlockCount++;
-        countView.textContent = `${unlockCount} Premium Unlocks`;
-      }
-      
-      // Re-enable button after 10 seconds
-      setTimeout(() => {
-        canClickUnlock = true;
-        unlockBtn.disabled = false;
-        unlockBtn.textContent = "Unlock Content 🔓";
-      }, 10000);
-    }
-
-    unlockBtn.addEventListener("click", handleUnlockClick);
-    
-    // Alternative simpler approach if the above doesn't work
-    function handleUnlockClickSimple() {
-      if (!canClickUnlock) return;
-      
-      const allCompleted = tasks.every(task => task.done);
-      if (!allCompleted) {
-        alert("Please complete ALL tasks before unlocking!");
-        return;
-      }
-      
-      canClickUnlock = false;
-      unlockBtn.disabled = true;
-      unlockBtn.textContent = "⏳ Please wait 10 seconds";
-      
-      // Direct Linkvertise redirection
-      if (destination) {
-        // Create a temporary link with Linkvertise
-        const tempLink = `https://link-to.net/${1264869}/${Math.random() * 1000}/dynamic`;
-        
-        // Redirect through Linkvertise
-        window.open(tempLink, "_blank");
-        
-        // After a short delay, open the actual destination
-        setTimeout(() => {
-          window.open(destination, "_blank");
-        }, 2000);
+        window.open(destination, "_blank");
       }
       
       // Update counter
@@ -598,10 +525,8 @@
         unlockBtn.textContent = "Unlock Content 🔓";
       }, 10000);
     }
-    
-    // You can switch between the two methods by changing the event listener:
-    // unlockBtn.addEventListener("click", handleUnlockClick); // Method 1
-    // unlockBtn.addEventListener("click", handleUnlockClickSimple); // Method 2
+
+    unlockBtn.addEventListener("click", handleUnlockClick);
   </script>
 </body>
 </html>

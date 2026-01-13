@@ -145,11 +145,14 @@
       font-weight: bold;
       width: 100%;
       margin-top: 10px;
+      text-decoration: none;
+      display: inline-block;
     }
     
     .task-btn:hover:not(:disabled) {
       background: linear-gradient(135deg, #0d8bf2, var(--primary));
       box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+      transform: translateY(-2px);
     }
     
     .task-btn:disabled {
@@ -160,6 +163,19 @@
     
     .task-btn.completed {
       background: linear-gradient(135deg, var(--success), #45a049);
+    }
+    
+    .task-link {
+      display: block;
+      margin-top: 15px;
+      color: #4fc3f7;
+      text-decoration: none;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+    
+    .task-link:hover {
+      text-decoration: underline;
     }
     
     #unlockBtn {
@@ -175,6 +191,7 @@
       margin: 30px auto;
       display: none;
       box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+      text-decoration: none;
     }
     
     #unlockBtn:hover {
@@ -191,6 +208,19 @@
       margin-top: 15px;
       color: #aaa;
       font-size: 0.9rem;
+    }
+    
+    .redirect-notice {
+      background: rgba(33, 150, 243, 0.1);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      display: none;
+    }
+    
+    .redirect-notice.show {
+      display: block;
     }
     
     .footer {
@@ -274,6 +304,23 @@
       font-size: 1rem;
       font-weight: bold;
     }
+    
+    /* زر العودة */
+    .back-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
   </style>
 </head>
 
@@ -294,34 +341,46 @@
       </div>
     </header>
     
+    <!-- إشعار التوجيه -->
+    <div class="redirect-notice" id="redirectNotice">
+      <p><i class="fas fa-external-link-alt"></i> يتم توجيهك إلى رابط المهمة...</p>
+      <p>يرجى العودة إلى هذه الصفحة بعد زيارة الرابط</p>
+      <button class="back-btn" id="backBtn" onclick="returnToTasks()">
+        <i class="fas fa-arrow-left"></i> العودة إلى المهام
+      </button>
+    </div>
+    
     <div class="tasks-container">
       <div class="task">
         <div class="task-number">1</div>
         <h3 class="task-title">المهمة الأولى</h3>
-        <p>انقر على الزر لفتح المهمة والإنتظار 10 ثوانٍ</p>
-        <button class="task-btn" onclick="startTask(1)">
-          <i class="fas fa-external-link-alt"></i> فتح المهمة
+        <p>انقر على الزر للذهاب إلى رابط المهمة</p>
+        <button class="task-btn" onclick="goToTask(1)">
+          <i class="fas fa-external-link-alt"></i> زيارة رابط المهمة
         </button>
+        <a href="https://task.subx.click/delta703" class="task-link" target="_blank">https://task.subx.click/delta703</a>
         <div id="timer1" class="timer" style="display: none;"></div>
       </div>
       
       <div class="task">
         <div class="task-number">2</div>
         <h3 class="task-title">المهمة الثانية</h3>
-        <p>انقر على الزر لفتح المهمة والإنتظار 10 ثوانٍ</p>
-        <button class="task-btn" onclick="startTask(2)">
-          <i class="fas fa-external-link-alt"></i> فتح المهمة
+        <p>انقر على الزر للذهاب إلى رابط المهمة</p>
+        <button class="task-btn" onclick="goToTask(2)">
+          <i class="fas fa-external-link-alt"></i> زيارة رابط المهمة
         </button>
+        <a href="https://task.subx.click/delta703" class="task-link" target="_blank">https://task.subx.click/delta703</a>
         <div id="timer2" class="timer" style="display: none;"></div>
       </div>
       
       <div class="task">
         <div class="task-number">3</div>
         <h3 class="task-title">المهمة الثالثة</h3>
-        <p>انقر على الزر لفتح المهمة والإنتظار 10 ثوانٍ</p>
-        <button class="task-btn" onclick="startTask(3)">
-          <i class="fas fa-external-link-alt"></i> فتح المهمة
+        <p>انقر على الزر للذهاب إلى رابط المهمة</p>
+        <button class="task-btn" onclick="goToTask(3)">
+          <i class="fas fa-external-link-alt"></i> زيارة رابط المهمة
         </button>
+        <a href="https://task.subx.click/delta703" class="task-link" target="_blank">https://task.subx.click/delta703</a>
         <div id="timer3" class="timer" style="display: none;"></div>
       </div>
     </div>
@@ -356,6 +415,7 @@
     
     // مؤقتات المهام
     let taskTimers = {};
+    let activeTaskId = null;
     
     // تحديث شريط التقدم
     function updateProgress() {
@@ -409,23 +469,41 @@
       }, 300);
     }
     
-    // بدء المهمة
-    function startTask(id) {
+    // الذهاب إلى رابط المهمة
+    function goToTask(id) {
       // التحقق إذا كانت المهمة مكتملة بالفعل
       if (localStorage.getItem("task_" + id)) {
         showAlert("المهمة " + id + " مكتملة بالفعل!");
         return;
       }
       
-      // فتح رابط المهمة في نافذة جديدة
-      window.open(TASK_LINK, "_blank");
+      // تعيين المهمة النشطة
+      activeTaskId = id;
       
-      // عرض رسالة الانتظار
-      showAlert("يرجى الانتظار 10 ثوانٍ حتى يتم تسجيل المهمة...");
+      // عرض إشعار التوجيه
+      const redirectNotice = document.getElementById("redirectNotice");
+      const backBtn = document.getElementById("backBtn");
       
-      // تعطيل الزر وبدء المؤقت
-      const btn = document.querySelectorAll(".task-btn")[id - 1];
+      redirectNotice.classList.add("show");
+      backBtn.style.display = "block";
+      
+      // إخفاء قائمة المهام مؤقتاً
+      document.querySelector('.tasks-container').style.display = "none";
+      document.getElementById('unlockBtn').style.display = "none";
+      
+      // بدء المؤقت
+      startTaskTimer(id);
+      
+      // توجيه المستخدم إلى الرابط في نفس التبويب بعد تأخير بسيط
+      setTimeout(() => {
+        window.location.href = TASK_LINK;
+      }, 1500);
+    }
+    
+    // بدء مؤقت المهمة
+    function startTaskTimer(id) {
       const timerElement = document.getElementById("timer" + id);
+      const btn = document.querySelectorAll(".task-btn")[id - 1];
       
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
@@ -443,6 +521,24 @@
           completeTask(id);
         }
       }, 1000);
+    }
+    
+    // العودة إلى صفحة المهام
+    function returnToTasks() {
+      const redirectNotice = document.getElementById("redirectNotice");
+      const tasksContainer = document.querySelector('.tasks-container');
+      const unlockBtn = document.getElementById('unlockBtn');
+      
+      redirectNotice.classList.remove("show");
+      tasksContainer.style.display = "grid";
+      
+      // إظهار زر الفتح إذا كان جاهزاً
+      checkUnlock();
+      
+      // إذا كانت هناك مهمة نشطة، أكمل المؤقت
+      if (activeTaskId) {
+        showAlert("تم تسجيل عودتك. يستمر المؤقت...");
+      }
     }
     
     // إكمال المهمة
@@ -466,41 +562,39 @@
       
       // عرض رسالة النجاح
       showAlert(`تم إكمال المهمة ${id} بنجاح! ✅`, true);
+      
+      // إعادة تعيين المهمة النشطة
+      activeTaskId = null;
     }
     
     // التحقق من إمكانية فتح المحتوى
     function checkUnlock() {
       const doneTasks = updateProgress();
+      const unlockBtn = document.getElementById("unlockBtn");
       
       if (doneTasks === TASKS_COUNT) {
-        const unlockBtn = document.getElementById("unlockBtn");
         unlockBtn.style.display = "block";
         
         // عرض رسالة تهنئة
         setTimeout(() => {
           showAlert("تهانينا! لقد أكملت جميع المهام. يمكنك الآن فتح المحتوى.", true);
         }, 500);
+      } else {
+        unlockBtn.style.display = "none";
       }
     }
     
     // فتح المحتوى
     function unlock() {
-      // فتح رابط المحتوى
-      window.open(FINAL_UNLOCK_LINK, "_blank");
+      // توجيه إلى رابط المحتوى في نفس التبويب
+      window.location.href = FINAL_UNLOCK_LINK;
       
-      // عرض رسالة
-      showAlert("يتم الآن فتح المحتوى المميز...", true);
-      
-      // إعادة تعيين التقدم بعد 3 ثوانٍ
+      // مسح بيانات التخزين المحلي بعد التأخير
       setTimeout(() => {
-        // مسح بيانات التخزين المحلي
         for (let i = 1; i <= TASKS_COUNT; i++) {
           localStorage.removeItem("task_" + i);
         }
-        
-        // إعادة تحميل الصفحة
-        location.reload();
-      }, 3000);
+      }, 1000);
     }
     
     // تهيئة الصفحة عند التحميل
@@ -518,7 +612,30 @@
       // تحديث شريط التقدم والتحقق من الإطلاق
       updateProgress();
       checkUnlock();
+      
+      // إخفاء إشعار التوجيه
+      document.getElementById("redirectNotice").classList.remove("show");
+      document.querySelector('.tasks-container').style.display = "grid";
     };
+    
+    // التحقق من العودة من الرابط
+    window.onpageshow = function(event) {
+      if (event.persisted || window.performance && window.performance.navigation.type === 2) {
+        // إذا عاد المستخدم من الرابط، أكمل المهمة النشطة
+        if (activeTaskId) {
+          const timePassed = Math.floor((Date.now() - window.taskStartTime) / 1000);
+          
+          if (timePassed >= 10) {
+            completeTask(activeTaskId);
+          } else {
+            showAlert(`يرجى البقاء على الرابط لمدة ${10 - timePassed} ثوانٍ إضافية`);
+          }
+        }
+      }
+    };
+    
+    // حفظ وقت بدء المهمة
+    window.taskStartTime = Date.now();
   </script>
   
   <!-- إضافة Linkvertise script في نهاية الجسم -->

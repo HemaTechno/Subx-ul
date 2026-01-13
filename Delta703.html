@@ -166,62 +166,10 @@
       background: linear-gradient(135deg, var(--success), #45a049);
     }
     
-    .task-link {
-      display: block;
-      margin-top: 15px;
-      color: #4fc3f7;
-      text-decoration: none;
-      font-size: 0.9rem;
-      word-break: break-all;
-    }
-    
-    .task-link:hover {
-      text-decoration: underline;
-    }
-    
-    #unlockBtn {
-      background: linear-gradient(135deg, var(--success), #45a049);
-      color: white;
-      border: none;
-      padding: 18px 40px;
-      border-radius: 10px;
-      font-size: 1.3rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: bold;
-      margin: 30px auto;
-      display: none;
-      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-      text-decoration: none;
-    }
-    
-    #unlockBtn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
-    }
-    
-    .unlock-icon {
-      margin-left: 10px;
-      font-size: 1.5rem;
-    }
-    
     .timer {
       margin-top: 15px;
       color: #aaa;
       font-size: 0.9rem;
-    }
-    
-    .redirect-notice {
-      background: rgba(33, 150, 243, 0.1);
-      border: 1px solid var(--primary);
-      border-radius: 8px;
-      padding: 15px;
-      margin: 15px 0;
-      display: none;
-    }
-    
-    .redirect-notice.show {
-      display: block;
     }
     
     .footer {
@@ -305,23 +253,6 @@
       font-size: 1rem;
       font-weight: bold;
     }
-    
-    /* زر العودة */
-    .back-btn {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      margin-top: 20px;
-      display: none;
-    }
-    
-    .back-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
   </style>
 </head>
 
@@ -341,15 +272,6 @@
         </div>
       </div>
     </header>
-    
-    <!-- إشعار التوجيه -->
-    <div class="redirect-notice" id="redirectNotice">
-      <p><i class="fas fa-external-link-alt"></i> يتم توجيهك إلى رابط المهمة...</p>
-      <p>يرجى العودة إلى هذه الصفحة بعد زيارة الرابط</p>
-      <button class="back-btn" id="backBtn" onclick="returnToTasks()">
-        <i class="fas fa-arrow-left"></i> العودة إلى المهام
-      </button>
-    </div>
     
     <div class="tasks-container">
       <div class="task">
@@ -483,24 +405,14 @@
       // تعيين المهمة النشطة
       activeTaskId = id;
       
-      // عرض إشعار التوجيه
-      const redirectNotice = document.getElementById("redirectNotice");
-      const backBtn = document.getElementById("backBtn");
-      
-      redirectNotice.classList.add("show");
-      backBtn.style.display = "block";
-      
-      // إخفاء قائمة المهام مؤقتاً
-      document.querySelector('.tasks-container').style.display = "none";
-      document.getElementById('unlockBtn').style.display = "none";
+      // حفظ وقت بدء المهمة
+      window.taskStartTime = Date.now();
       
       // بدء المؤقت
       startTaskTimer(id);
       
-      // توجيه المستخدم إلى الرابط في نفس التبويب بعد تأخير بسيط
-      setTimeout(() => {
-        window.location.href = TASK_LINKS[id];
-      }, 1500);
+      // النقل مباشرة إلى الرابط
+      window.open(TASK_LINKS[id], '_blank');
     }
     
     // بدء مؤقت المهمة
@@ -524,24 +436,6 @@
           completeTask(id);
         }
       }, 1000);
-    }
-    
-    // العودة إلى صفحة المهام
-    function returnToTasks() {
-      const redirectNotice = document.getElementById("redirectNotice");
-      const tasksContainer = document.querySelector('.tasks-container');
-      const unlockBtn = document.getElementById('unlockBtn');
-      
-      redirectNotice.classList.remove("show");
-      tasksContainer.style.display = "grid";
-      
-      // إظهار زر الفتح إذا كان جاهزاً
-      checkUnlock();
-      
-      // إذا كانت هناك مهمة نشطة، أكمل المؤقت
-      if (activeTaskId) {
-        showAlert("تم تسجيل عودتك. يستمر المؤقت...");
-      }
     }
     
     // إكمال المهمة
@@ -615,30 +509,7 @@
       // تحديث شريط التقدم والتحقق من الإطلاق
       updateProgress();
       checkUnlock();
-      
-      // إخفاء إشعار التوجيه
-      document.getElementById("redirectNotice").classList.remove("show");
-      document.querySelector('.tasks-container').style.display = "grid";
     };
-    
-    // التحقق من العودة من الرابط
-    window.onpageshow = function(event) {
-      if (event.persisted || window.performance && window.performance.navigation.type === 2) {
-        // إذا عاد المستخدم من الرابط، أكمل المهمة النشطة
-        if (activeTaskId) {
-          const timePassed = Math.floor((Date.now() - window.taskStartTime) / 1000);
-          
-          if (timePassed >= 10) {
-            completeTask(activeTaskId);
-          } else {
-            showAlert(`يرجى البقاء على الرابط لمدة ${10 - timePassed} ثوانٍ إضافية`);
-          }
-        }
-      }
-    };
-    
-    // حفظ وقت بدء المهمة
-    window.taskStartTime = Date.now();
   </script>
   
   <!-- إضافة Linkvertise script في نهاية الجسم -->
@@ -650,4 +521,4 @@
     });
   </script>
 </body>
-</html>
+</html> 

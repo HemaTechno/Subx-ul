@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
+  <script>linkvertise(1264869, {whitelist: [], blacklist: [""]});</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subx</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0a0a14;
+      --primary-dark: #05050c;
+      --secondary: #1a1a2e;
+      --accent: #6a4cff;
+      --accent-light: #8a6eff;
+      --accent-secondary: #00e0ff;
+      --light: #f0f0f0;
+      --gray: #8a8a9e;
+      --success: #00ff9d;
+      --gradient-dark: linear-gradient(135deg, #05050c 0%, #0a0a14 50%, #1a1a2e 100%);
+      --gradient-accent: linear-gradient(135deg, #6a4cff 0%, #8a6eff 100%);
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--gradient-dark);
+      color: var(--light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: var(--glass-bg);
+      border-radius: 15px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .links-section {
+      background: var(--glass-bg);
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .links-title {
+      color: var(--light);
+      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .links-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .link-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: var(--light);
+      border: 1px solid var(--glass-border);
+      transition: var(--transition);
+    }
+
+    .link-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .link-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 8px;
+      background: rgba(106, 76, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .link-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .link-main {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+
+    .link-sub {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .card {
+      background: var(--glass-bg);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .content-title {
+      color: var(--light);
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .content-desc {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .progress-section {
+      margin: 20px 0;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    #progressContainer {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      height: 10px;
+    }
+
+    #progressBar {
+      width: 0%;
+      height: 100%;
+      background: var(--gradient-accent);
+      transition: width 0.4s ease;
+      border-radius: 10px;
+    }
+
+    .task {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--glass-border);
+    }
+
+    .task-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .task-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(106, 76, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .task-text {
+      text-align: left;
+    }
+
+    .task-title {
+      font-weight: 600;
+      color: var(--light);
+      margin-bottom: 3px;
+      font-size: 0.95rem;
+    }
+
+    .task-desc {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .task button {
+      background: var(--gradient-accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition);
+      min-width: 80px;
+    }
+
+    .task button:hover {
+      opacity: 0.9;
+    }
+
+    .task.completed button {
+      background: var(--success);
+    }
+
+    #unlockBtn {
+      display: none;
+      margin-top: 20px;
+      background: var(--gradient-accent);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: var(--transition);
+    }
+
+    #unlockBtn:hover {
+      opacity: 0.9;
+    }
+
+    #unlockBtn:disabled {
+      background: var(--gray);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    #countView {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      background: var(--glass-bg);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+      border: 1px solid var(--glass-border);
+    }
+
+    .footer {
+      margin-top: 20px;
+      padding: 15px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .youtube-link {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: rgba(255, 0, 0, 0.1);
+      border-radius: 10px;
+      transition: var(--transition);
+    }
+
+    .youtube-link:hover {
+      background: rgba(255, 0, 0, 0.2);
+    }
+
+    .youtube-link i {
+      color: #ff0000;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .card, .links-section {
+        padding: 15px;
+      }
+      
+      .brand {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">Hema Tech</div>
+      <div class="tagline">Complete all tasks to unlock premium content. Allow pop-ups if needed.</div>
+    </div>
+
+    <!-- روابط مباشرة في بداية الصفحة -->
+    <div class="links-section">
+      <h3 class="links-title">Important Links</h3>
+      <div class="links-container">
+        <a href="https://youtube.com/@hema_tech1" target="_blank" class="link-button">
+          <div class="link-icon">
+            <i class="fab fa-youtube"></i>
+          </div>
+          <div class="link-text">
+            <div class="link-main">Subscribe to Channel</div>
+            <div class="link-sub">Subscribe to Hema Tech YouTube channel</div>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        
+        <a href="https://www.youtube.com/watch?v=example" target="_blank" class="link-button">
+          <div class="link-icon">
+            <i class="fas fa-thumbs-up"></i>
+          </div>
+          <div class="link-text">
+            <div class="link-main">Like the Video</div>
+            <div class="link-sub">Like our latest video</div>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        
+        <button onclick="skipTasks()" class="link-button" style="cursor: pointer;">
+          <div class="link-icon">
+            <i class="fas fa-forward"></i>
+          </div>
+          <div class="link-text">
+            <div class="link-main">Skip Tasks</div>
+            <div class="link-sub">Skip all tasks (for testing)</div>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="content-title">Premium Content</h2>
+      <p class="content-desc">Complete all tasks below to unlock the content. Each task must be completed in order.</p>
+
+      <div class="progress-section">
+        <div class="progress-info">
+          <span>Progress</span>
+          <span id="progressText">0%</span>
+        </div>
+        <div id="progressContainer">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+
+      <div id="taskList">
+        <!-- المهام سيتم إضافتها هنا -->
+      </div>
+      
+      <button id="unlockBtn">Unlock Content 🔓</button>
+    </div>
+
+    <div id="countView">0 Premium Unlocks</div>
+
+    <div class="footer">
+      <div>All copyright for Hema Tech © 2025-2026</div>
+      <a href="https://youtube.com/@hema_tech1?si=UqCsC50yMsxuftwX" target="_blank" class="youtube-link">
+        <i class="fab fa-youtube"></i>
+        <span>Hema Tech YouTube</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // بيانات ثابتة من الكود نفسه
+    const tasksData = [
+      { 
+        id: "task1",
+        typeLabel: "Subscribe to Channel", 
+        link: "https://youtube.com/@hema_tech1", 
+        done: false,
+        icon: "fab fa-youtube",
+        description: "Subscribe to Hema Tech YouTube channel"
+      },
+      { 
+        id: "task2",
+        typeLabel: "Like the Video", 
+        link: "https://www.youtube.com/watch?v=example", 
+        done: false,
+        icon: "fas fa-thumbs-up",
+        description: "Like our latest video"
+      },
+      { 
+        id: "task3",
+        typeLabel: "Follow on Social Media", 
+        link: "https://www.example.com/social", 
+        done: false,
+        icon: "fas fa-share-alt",
+        description: "Follow us on social media"
+      },
+      { 
+        id: "task4",
+        typeLabel: "Join Telegram Group", 
+        link: "https://t.me/hema_tech", 
+        done: false,
+        icon: "fab fa-telegram",
+        description: "Join our Telegram group"
+      }
+    ];
+
+    const linkTitle = document.getElementById("linkTitle");
+    const linkDesc = document.getElementById("linkDesc");
+    const taskList = document.getElementById("taskList");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const countView = document.getElementById("countView");
+
+    let tasks = [...tasksData];
+    let completed = 0;
+    let destination = "https://www.example.com/premium-content"; // رابط المحتوى المميز
+    let unlockCount = 0;
+    let canClickUnlock = true;
+
+    // تحميل البيانات
+    function loadData() {
+      // زيادة العداد عشوائيًا عند التحميل
+      unlockCount = Math.floor(Math.random() * 100) + 50;
+      countView.textContent = `${unlockCount} Premium Unlocks`;
+      renderTasks();
+    }
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      completed = tasks.filter(t => t.done).length;
+
+      tasks.forEach((task, index) => {
+        const div = document.createElement("div");
+        div.className = `task ${task.done ? 'completed' : ''}`;
+        
+        // إخفاء المهام القادمة
+        if (index > completed) {
+          div.style.display = "none";
+        }
+
+        div.innerHTML = `
+          <div class="task-content">
+            <div class="task-icon">
+              <i class="${task.icon || 'fas fa-tasks'}"></i>
+            </div>
+            <div class="task-text">
+              <div class="task-title">${task.typeLabel || "Task"}</div>
+              <div class="task-desc">${task.description || "Complete this task"}</div>
+            </div>
+          </div>
+          ${task.done ? 
+            '<button style="background: #00ff9d;">✓ Completed</button>' : 
+            `<button onclick="startTask(${index})">Start</button>`
+          }
+        `;
+        taskList.appendChild(div);
+      });
+
+      // تحديث التقدم
+      const progress = tasks.length > 0 ? (completed / tasks.length) * 100 : 0;
+      progressBar.style.width = progress + "%";
+      progressText.textContent = `${Math.round(progress)}%`;
+
+      // عرض زر الفتح فقط عند اكتمال جميع المهام
+      if (completed === tasks.length && tasks.length > 0) {
+        unlockBtn.style.display = "block";
+      } else {
+        unlockBtn.style.display = "none";
+      }
+    }
+
+    window.startTask = function(index) {
+      const task = tasks[index];
+      if (!task) return;
+      
+      // تأكد من أن المهمة الحالية فقط هي التي يمكن تفعيلها
+      if (index > completed) {
+        alert("Please complete the previous task first!");
+        return;
+      }
+      
+      // وضع علامة على المهمة كمكتملة
+      task.done = true;
+      
+      // فتح رابط المهمة
+      if (task.link) {
+        window.open(task.link, "_blank");
+      }
+      
+      // انتظر 10 ثواني قبل عرض المهمة التالية
+      setTimeout(() => {
+        renderTasks();
+      }, 10000);
+    };
+
+    // دالة تخطي جميع المهام (للتجربة)
+    window.skipTasks = function() {
+      if (confirm("Do you want to skip all tasks? This is for testing only.")) {
+        tasks.forEach(task => {
+          task.done = true;
+        });
+        renderTasks();
+      }
+    };
+
+    // التعامل مع زر فتح المحتوى
+    function handleUnlockClick() {
+      if (!canClickUnlock) {
+        return;
+      }
+      
+      // تأكد من اكتمال جميع المهام
+      const allCompleted = tasks.every(task => task.done);
+      if (!allCompleted) {
+        alert("Please complete ALL tasks before unlocking!");
+        return;
+      }
+      
+      // تعطيل الزر لمدة 10 ثواني
+      canClickUnlock = false;
+      unlockBtn.disabled = true;
+      unlockBtn.textContent = "⏳ Please wait 10 seconds";
+      
+      // فتح رابط المحتوى المميز
+      if (destination) {
+        window.open(destination, "_blank");
+      }
+      
+      // تحديث العداد
+      unlockCount++;
+      countView.textContent = `${unlockCount} Premium Unlocks`;
+      
+      // إعادة تفعيل الزر
+      setTimeout(() => {
+        canClickUnlock = true;
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = "Unlock Content 🔓";
+      }, 10000);
+    }
+
+    unlockBtn.addEventListener("click", handleUnlockClick);
+
+    // تحميل البيانات عند بدء التشغيل
+    window.addEventListener("DOMContentLoaded", loadData);
+  </script>
+</body>
+</html>

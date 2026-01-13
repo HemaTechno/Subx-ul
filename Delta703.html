@@ -359,7 +359,7 @@
 
       <div class="status-indicator">
         <div class="status-text">Tasks Completed:</div>
-        <div class="status-count" id="tasksCompleted">0/4</div>
+        <div class="status-count" id="tasksCompleted">0/5</div>
       </div>
 
       <div class="progress-section">
@@ -423,12 +423,14 @@
       },
       { 
         id: "task4",
-        typeLabel: "Follow on Instagram", 
-        link: "https://instagram.com/hema_tech", 
+        typeLabel: "Complete Linkvertise", 
+        link: "#",
         done: false,
-        icon: "fab fa-instagram",
-        description: "Follow us on Instagram",
-        external: true
+        icon: "fas fa-link",
+        description: "Complete Linkvertise task (counts as 2 tasks)",
+        external: true,
+        isLinkvertise: true,
+        weight: 2
       }
     ];
 
@@ -443,35 +445,62 @@
 
     let tasks = [...tasksData];
     let completed = 0;
+    let totalTasksWeight = 0;
     let unlockCount = Math.floor(Math.random() * 100) + 50; // عداد عشوائي
     let linkvertiseLoaded = false;
+
+    // حساب وزن المهام الإجمالي
+    function calculateTotalWeight() {
+      totalTasksWeight = 0;
+      tasks.forEach(task => {
+        totalTasksWeight += task.weight || 1;
+      });
+      return totalTasksWeight;
+    }
+
+    // حساب الوزن المكتمل
+    function calculateCompletedWeight() {
+      let weight = 0;
+      tasks.forEach(task => {
+        if (task.done) {
+          weight += task.weight || 1;
+        }
+      });
+      return weight;
+    }
 
     // تحميل البيانات وعرض المهام
     function loadData() {
       countView.textContent = `${unlockCount} Premium Unlocks`;
+      calculateTotalWeight();
       renderTasks();
     }
 
     // عرض جميع المهام مرة واحدة
     function renderTasks() {
       taskList.innerHTML = "";
-      completed = tasks.filter(t => t.done).length;
+      const completedWeight = calculateCompletedWeight();
       
       // تحديث عداد المهام المكتملة
-      tasksCompleted.textContent = `${completed}/${tasks.length}`;
+      tasksCompleted.textContent = `${completedWeight}/${totalTasksWeight}`;
 
       tasks.forEach((task, index) => {
         const div = document.createElement("div");
         div.className = `task ${task.done ? 'completed' : ''}`;
         
-        // عرض جميع المهام
+        // إضافة علامة خاصة لمهمة Linkvertise
+        const linkvertiseBadge = task.isLinkvertise ? 
+          `<span style="font-size: 0.7rem; color: #00e0ff; background: rgba(0, 224, 255, 0.1); padding: 2px 5px; border-radius: 4px; margin-left: 5px;">
+            <i class="fas fa-star"></i> Counts as ${task.weight} tasks
+          </span>` : '';
+        
         div.innerHTML = `
           <div class="task-content">
-            <div class="task-icon">
+            <div class="task-icon" style="${task.isLinkvertise ? 'background: rgba(0, 224, 255, 0.2); color: #00e0ff;' : ''}">
               <i class="${task.icon || 'fas fa-tasks'}"></i>
             </div>
             <div class="task-text">
-              <div class="task-title">${task.typeLabel || "Task"}</div>
+              <div class="task-title">${task.typeLabel || "Task"} ${linkvertiseBadge}</div>
               <div class="task-desc">${task.description || "Complete this task"}</div>
             </div>
           </div>
@@ -484,7 +513,7 @@
       });
 
       // تحديث التقدم
-      const progress = tasks.length > 0 ? (completed / tasks.length) * 100 : 0;
+      const progress = totalTasksWeight > 0 ? (completedWeight / totalTasksWeight) * 100 : 0;
       progressBar.style.width = progress + "%";
       progressText.textContent = `${Math.round(progress)}%`;
 
@@ -501,9 +530,9 @@
       } else {
         // بعض المهام غير مكتملة - تعطيل الزر
         unlockBtn.disabled = true;
-        unlockBtn.textContent = `Complete All Tasks to Unlock (${completed}/${tasks.length})`;
+        unlockBtn.textContent = `Complete All Tasks to Unlock (${completedWeight}/${totalTasksWeight})`;
         unlockBtn.classList.remove("completed");
-        unlockNote.textContent = `${tasks.length - completed} task(s) remaining`;
+        unlockNote.textContent = `${totalTasksWeight - completedWeight} task(s) remaining`;
         unlockNote.style.color = "rgba(255, 255, 255, 0.5)";
       }
     }
@@ -516,6 +545,12 @@
       // إذا كانت المهمة مكتملة بالفعل
       if (task.done) {
         alert("This task is already completed!");
+        return;
+      }
+      
+      // إذا كانت مهمة Linkvertise
+      if (task.isLinkvertise) {
+        startLinkvertiseTask(task, index);
         return;
       }
       
@@ -533,6 +568,64 @@
       // إشعار بنجاح إكمال المهمة
       showNotification(`Task "${task.typeLabel}" started! Complete it to proceed.`);
     };
+
+    // بدء مهمة Linkvertise
+    function startLinkvertiseTask(task, index) {
+      if (confirm(`Complete Linkvertise task?\n\nThis task counts as ${task.weight} tasks. Click OK to start.`)) {
+        // تحميل Linkvertise
+        loadLinkvertise().then(() => {
+          // تم تحميل Linkvertise بنجاح
+          task.done = true;
+          renderTasks();
+          showNotification(`Linkvertise task completed! Counts as ${task.weight} tasks.`);
+        }).catch((error) => {
+          // في حالة الخطأ، نعرض رسالة توضيحية
+          if (confirm("Linkvertise could not be loaded. Would you like to mark this task as completed for testing?")) {
+            task.done = true;
+            renderTasks();
+            showNotification(`Linkvertise task marked as completed! Counts as ${task.weight} tasks.`);
+          }
+        });
+      }
+    }
+
+    // تحميل Linkvertise
+    function loadLinkvertise() {
+      return new Promise((resolve, reject) => {
+        if (!linkvertiseLoaded) {
+          const script = document.createElement('script');
+          script.src = 'https://publisher.linkvertise.com/cdn/linkvertise.js';
+          script.onload = function() {
+            linkvertiseLoaded = true;
+            try {
+              // تفعيل Linkvertise
+              linkvertise(1264869, {
+                whitelist: [],
+                blacklist: [""],
+                force: true
+              });
+              resolve();
+            } catch (error) {
+              reject(error);
+            }
+          };
+          script.onerror = reject;
+          document.head.appendChild(script);
+        } else {
+          // إذا كان Linkvertise محملًا بالفعل
+          try {
+            linkvertise(1264869, {
+              whitelist: [],
+              blacklist: [""],
+              force: true
+            });
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        }
+      });
+    }
 
     // عرض إشعار
     function showNotification(message) {
@@ -615,59 +708,23 @@
       unlockBtn.textContent = "Processing... ⏳";
       
       // تحميل وتفعيل Linkvertise
-      if (!linkvertiseLoaded) {
-        // إنشاء عنصر script لتحميل Linkvertise
-        const script = document.createElement('script');
-        script.src = 'https://publisher.linkvertise.com/cdn/linkvertise.js';
-        script.onload = function() {
-          // بعد تحميل Linkvertise، تفعيله
-          try {
-            linkvertise(1264869, {
-              whitelist: [],
-              blacklist: [""],
-              force: true
-            });
-            showNotification("Linkvertise activated! Follow the instructions.");
-          } catch (error) {
-            showNotification("Error activating Linkvertise. Please try again.");
-            unlockBtn.disabled = false;
-            unlockBtn.textContent = "Unlock Content Now! 🔓";
-          }
-        };
+      loadLinkvertise().then(() => {
+        showNotification("Linkvertise activated! Follow the instructions.");
         
-        script.onerror = function() {
-          showNotification("Failed to load Linkvertise. Please check your connection.");
+        // تحديث العداد
+        unlockCount++;
+        countView.textContent = `${unlockCount} Premium Unlocks`;
+        
+        // إعادة تعيين الزر بعد 10 ثواني
+        setTimeout(() => {
           unlockBtn.disabled = false;
           unlockBtn.textContent = "Unlock Content Now! 🔓";
-        };
-        
-        document.head.appendChild(script);
-        linkvertiseLoaded = true;
-      } else {
-        // إذا كان Linkvertise محملًا بالفعل، إعادة تفعيله
-        try {
-          linkvertise(1264869, {
-            whitelist: [],
-            blacklist: [""],
-            force: true
-          });
-          showNotification("Linkvertise activated! Follow the instructions.");
-        } catch (error) {
-          showNotification("Error activating Linkvertise. Please try again.");
-          unlockBtn.disabled = false;
-          unlockBtn.textContent = "Unlock Content Now! 🔓";
-        }
-      }
-      
-      // تحديث العداد
-      unlockCount++;
-      countView.textContent = `${unlockCount} Premium Unlocks`;
-      
-      // إعادة تعيين الزر بعد 10 ثواني
-      setTimeout(() => {
+        }, 10000);
+      }).catch((error) => {
+        showNotification("Error activating Linkvertise. Please try again.");
         unlockBtn.disabled = false;
         unlockBtn.textContent = "Unlock Content Now! 🔓";
-      }, 10000);
+      });
     }
 
     // إضافة حدث النقر على زر Unlock

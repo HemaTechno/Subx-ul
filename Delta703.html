@@ -79,6 +79,7 @@
       margin-bottom: 15px;
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(10px);
+      position: relative;
     }
 
     .content-title {
@@ -203,7 +204,6 @@
     }
 
     #unlockBtn {
-      display: none;
       margin-top: 20px;
       background: var(--gradient-accent);
       color: #fff;
@@ -215,16 +215,41 @@
       cursor: pointer;
       width: 100%;
       transition: var(--transition);
+      /* زر ثابت ودائمًا مرئي */
+      display: block;
+      position: sticky;
+      bottom: 10px;
+      z-index: 10;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 
-    #unlockBtn:hover {
+    #unlockBtn:hover:not(:disabled) {
       opacity: 0.9;
+      transform: translateY(-2px);
     }
 
     #unlockBtn:disabled {
       background: var(--gray);
       cursor: not-allowed;
       opacity: 0.7;
+      transform: none;
+    }
+
+    #unlockBtn.completed {
+      background: var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(0, 255, 157, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 157, 0);
+      }
     }
 
     #countView {
@@ -273,9 +298,32 @@
       color: rgba(255, 255, 255, 0.5);
       font-size: 0.75rem;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 10px;
       padding: 10px;
-      border-top: 1px solid var(--glass-border);
+    }
+
+    .status-indicator {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .status-text {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .status-count {
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(106, 76, 255, 0.2);
+      padding: 3px 10px;
+      border-radius: 20px;
     }
 
     @media (max-width: 480px) {
@@ -289,6 +337,11 @@
       
       .brand {
         font-size: 1.8rem;
+      }
+      
+      #unlockBtn {
+        padding: 12px;
+        font-size: 0.95rem;
       }
     }
   </style>
@@ -304,6 +357,11 @@
       <h2 class="content-title">Premium Content</h2>
       <p class="content-desc">Complete all tasks below to unlock the content. All tasks must be completed successfully.</p>
 
+      <div class="status-indicator">
+        <div class="status-text">Tasks Completed:</div>
+        <div class="status-count" id="tasksCompleted">0/4</div>
+      </div>
+
       <div class="progress-section">
         <div class="progress-info">
           <span>Progress</span>
@@ -318,8 +376,8 @@
         <!-- المهام سيتم إضافتها هنا -->
       </div>
       
-      <button id="unlockBtn">Unlock Content 🔓</button>
-      <div class="note">Complete all tasks above before unlocking</div>
+      <button id="unlockBtn" disabled>Complete All Tasks to Unlock 🔓</button>
+      <div class="note" id="unlockNote">Complete all tasks to enable unlock button</div>
     </div>
 
     <div id="countView">0 Premium Unlocks</div>
@@ -380,6 +438,8 @@
     const progressText = document.getElementById("progressText");
     const unlockBtn = document.getElementById("unlockBtn");
     const countView = document.getElementById("countView");
+    const tasksCompleted = document.getElementById("tasksCompleted");
+    const unlockNote = document.getElementById("unlockNote");
 
     let tasks = [...tasksData];
     let completed = 0;
@@ -396,14 +456,15 @@
     function renderTasks() {
       taskList.innerHTML = "";
       completed = tasks.filter(t => t.done).length;
+      
+      // تحديث عداد المهام المكتملة
+      tasksCompleted.textContent = `${completed}/${tasks.length}`;
 
       tasks.forEach((task, index) => {
         const div = document.createElement("div");
         div.className = `task ${task.done ? 'completed' : ''}`;
         
-        // عرض جميع المهام (لا يوجد إخفاء)
-        div.style.display = "flex";
-
+        // عرض جميع المهام
         div.innerHTML = `
           <div class="task-content">
             <div class="task-icon">
@@ -415,7 +476,7 @@
             </div>
           </div>
           ${task.done ? 
-            '<button style="background: #00ff9d;">✓ Completed</button>' : 
+            '<button style="background: #00ff9d; cursor: default;">✓ Completed</button>' : 
             `<button onclick="startTask(${index})">Start</button>`
           }
         `;
@@ -427,11 +488,23 @@
       progressBar.style.width = progress + "%";
       progressText.textContent = `${Math.round(progress)}%`;
 
-      // عرض زر الفتح فقط عند اكتمال جميع المهام
-      if (completed === tasks.length && tasks.length > 0) {
-        unlockBtn.style.display = "block";
+      // تحديث حالة زر Unlock (ثابت ودائمًا مرئي)
+      const allCompleted = tasks.every(task => task.done);
+      
+      if (allCompleted) {
+        // جميع المهام مكتملة - تفعيل الزر
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = "Unlock Content Now! 🔓";
+        unlockBtn.classList.add("completed");
+        unlockNote.textContent = "All tasks completed! Click to unlock premium content";
+        unlockNote.style.color = "#00ff9d";
       } else {
-        unlockBtn.style.display = "none";
+        // بعض المهام غير مكتملة - تعطيل الزر
+        unlockBtn.disabled = true;
+        unlockBtn.textContent = `Complete All Tasks to Unlock (${completed}/${tasks.length})`;
+        unlockBtn.classList.remove("completed");
+        unlockNote.textContent = `${tasks.length - completed} task(s) remaining`;
+        unlockNote.style.color = "rgba(255, 255, 255, 0.5)";
       }
     }
 
@@ -439,6 +512,12 @@
     window.startTask = function(index) {
       const task = tasks[index];
       if (!task) return;
+      
+      // إذا كانت المهمة مكتملة بالفعل
+      if (task.done) {
+        alert("This task is already completed!");
+        return;
+      }
       
       // وضع علامة على المهمة كمكتملة
       task.done = true;
@@ -448,11 +527,68 @@
         window.open(task.link, "_blank");
       }
       
-      // إعادة عرض المهام بعد ثانيتين (لمحاكاة اكتمال المهمة)
-      setTimeout(() => {
-        renderTasks();
-      }, 2000);
+      // تحديث الواجهة
+      renderTasks();
+      
+      // إشعار بنجاح إكمال المهمة
+      showNotification(`Task "${task.typeLabel}" started! Complete it to proceed.`);
     };
+
+    // عرض إشعار
+    function showNotification(message) {
+      // إنشاء عنصر الإشعار
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--accent);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        z-index: 1000;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+        max-width: 300px;
+      `;
+      
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // إزالة الإشعار بعد 3 ثواني
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // إضافة أنيميشن للإشعارات
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
 
     // دالة تخطي جميع المهام (للتجربة)
     window.skipTasks = function() {
@@ -461,6 +597,7 @@
           task.done = true;
         });
         renderTasks();
+        showNotification("All tasks completed! You can now unlock the content.");
       }
     };
 
@@ -473,6 +610,10 @@
         return;
       }
       
+      // تعطيل الزر مؤقتًا لمنع النقر المتكرر
+      unlockBtn.disabled = true;
+      unlockBtn.textContent = "Processing... ⏳";
+      
       // تحميل وتفعيل Linkvertise
       if (!linkvertiseLoaded) {
         // إنشاء عنصر script لتحميل Linkvertise
@@ -480,42 +621,53 @@
         script.src = 'https://publisher.linkvertise.com/cdn/linkvertise.js';
         script.onload = function() {
           // بعد تحميل Linkvertise، تفعيله
+          try {
+            linkvertise(1264869, {
+              whitelist: [],
+              blacklist: [""],
+              force: true
+            });
+            showNotification("Linkvertise activated! Follow the instructions.");
+          } catch (error) {
+            showNotification("Error activating Linkvertise. Please try again.");
+            unlockBtn.disabled = false;
+            unlockBtn.textContent = "Unlock Content Now! 🔓";
+          }
+        };
+        
+        script.onerror = function() {
+          showNotification("Failed to load Linkvertise. Please check your connection.");
+          unlockBtn.disabled = false;
+          unlockBtn.textContent = "Unlock Content Now! 🔓";
+        };
+        
+        document.head.appendChild(script);
+        linkvertiseLoaded = true;
+      } else {
+        // إذا كان Linkvertise محملًا بالفعل، إعادة تفعيله
+        try {
           linkvertise(1264869, {
             whitelist: [],
             blacklist: [""],
             force: true
           });
-        };
-        document.head.appendChild(script);
-        linkvertiseLoaded = true;
-      } else {
-        // إذا كان Linkvertise محملًا بالفعل، إعادة تفعيله
-        linkvertise(1264869, {
-          whitelist: [],
-          blacklist: [""],
-          force: true
-        });
+          showNotification("Linkvertise activated! Follow the instructions.");
+        } catch (error) {
+          showNotification("Error activating Linkvertise. Please try again.");
+          unlockBtn.disabled = false;
+          unlockBtn.textContent = "Unlock Content Now! 🔓";
+        }
       }
-      
-      // تعطيل الزر مؤقتًا
-      unlockBtn.disabled = true;
-      unlockBtn.textContent = "Processing...";
       
       // تحديث العداد
       unlockCount++;
       countView.textContent = `${unlockCount} Premium Unlocks`;
       
-      // إعادة تعيين الزر بعد 5 ثواني
+      // إعادة تعيين الزر بعد 10 ثواني
       setTimeout(() => {
         unlockBtn.disabled = false;
-        unlockBtn.textContent = "Unlock Content 🔓";
-        
-        // إعادة تعيين المهام بعد الفتح
-        tasks.forEach(task => {
-          task.done = false;
-        });
-        renderTasks();
-      }, 5000);
+        unlockBtn.textContent = "Unlock Content Now! 🔓";
+      }, 10000);
     }
 
     // إضافة حدث النقر على زر Unlock

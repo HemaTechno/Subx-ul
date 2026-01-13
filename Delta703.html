@@ -359,7 +359,6 @@
         <button class="task-btn" onclick="goToTask(1)">
           <i class="fas fa-external-link-alt"></i> زيارة رابط المهمة
         </button>
-        <a href="https://task.subx.click/delta703" class="task-link" target="_blank">https://task.subx.click/delta703</a>
         <div id="timer1" class="timer" style="display: none;"></div>
       </div>
       
@@ -370,7 +369,6 @@
         <button class="task-btn" onclick="goToTask(2)">
           <i class="fas fa-external-link-alt"></i> زيارة رابط المهمة
         </button>
-        <a href="https://task.subx.click/delta703" class="task-link" target="_blank">https://task.subx.click/delta703</a>
         <div id="timer2" class="timer" style="display: none;"></div>
       </div>
       
@@ -381,7 +379,6 @@
         <button class="task-btn" onclick="goToTask(3)">
           <i class="fas fa-external-link-alt"></i> زيارة رابط المهمة
         </button>
-        <a href="https://task.subx.click/delta703" class="task-link" target="_blank">https://task.subx.click/delta703</a>
         <div id="timer3" class="timer" style="display: none;"></div>
       </div>
     </div>
@@ -409,7 +406,12 @@
 
   <script>
     // الإعدادات
-    const TASK_LINK = "https://task.subx.click/delta703"; // رابط المهمة
+    const TASK_LINKS = {
+      1: "https://task.subx.click/delta703",
+      2: "https://task.subx.click/delta703", 
+      3: "https://task.subx.click/delta703"
+    };
+    
     const FINAL_UNLOCK_LINK = "https://example.com/unlock"; // رابط المحتوى بعد الإكمال
     const TASKS_COUNT = 3;
     const WAIT_TIME = 10000; // 10 ثواني
@@ -497,7 +499,7 @@
       
       // توجيه المستخدم إلى الرابط في نفس التبويب بعد تأخير بسيط
       setTimeout(() => {
-        window.location.href = TASK_LINK;
+        window.location.href = TASK_LINKS[id];
       }, 1500);
     }
     

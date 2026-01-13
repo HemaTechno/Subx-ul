@@ -4,160 +4,603 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Subx</title>
-
-  <!-- Linkvertise -->
-  <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
+    :root {
+      --primary: #0a0a14;
+      --primary-dark: #05050c;
+      --secondary: #1a1a2e;
+      --accent: #6a4cff;
+      --accent-light: #8a6eff;
+      --accent-secondary: #00e0ff;
+      --light: #f0f0f0;
+      --gray: #8a8a9e;
+      --success: #00ff9d;
+      --gradient-dark: linear-gradient(135deg, #05050c 0%, #0a0a14 50%, #1a1a2e 100%);
+      --gradient-accent: linear-gradient(135deg, #6a4cff 0%, #8a6eff 100%);
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Inter, sans-serif;
-      background: #0a0a14;
-      color: #fff;
+      font-family: "Inter", sans-serif;
+      background: var(--gradient-dark);
+      color: var(--light);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
       padding: 20px;
+      line-height: 1.6;
     }
+
     .container {
-      max-width: 450px;
       width: 100%;
+      max-width: 450px;
+      margin: 0 auto;
     }
-    .card {
-      background: rgba(255,255,255,0.05);
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
       padding: 20px;
+      background: var(--glass-bg);
       border-radius: 15px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
     }
-    .task {
+
+    .brand {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .card {
+      background: var(--glass-bg);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .content-title {
+      color: var(--light);
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .content-desc {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .progress-section {
+      margin: 20px 0;
+    }
+
+    .progress-info {
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.9);
     }
+
+    #progressContainer {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      height: 10px;
+    }
+
+    #progressBar {
+      width: 0%;
+      height: 100%;
+      background: var(--gradient-accent);
+      transition: width 0.4s ease;
+      border-radius: 10px;
+    }
+
+    .task {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--glass-border);
+    }
+
+    .task-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .task-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(106, 76, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .task-text {
+      text-align: left;
+    }
+
+    .task-title {
+      font-weight: 600;
+      color: var(--light);
+      margin-bottom: 3px;
+      font-size: 0.95rem;
+    }
+
+    .task-desc {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
     .task button {
-      background: #6a4cff;
-      border: none;
+      background: var(--gradient-accent);
       color: #fff;
-      padding: 6px 12px;
-      border-radius: 8px;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 15px;
       cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition);
     }
+
+    .task button:hover {
+      opacity: 0.9;
+    }
+
+    .task.completed button {
+      background: var(--success);
+    }
+
     #unlockBtn {
       display: none;
       margin-top: 20px;
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      background: #6a4cff;
+      background: var(--gradient-accent);
       color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
       cursor: pointer;
+      width: 100%;
+      transition: var(--transition);
     }
+
+    #unlockBtn:hover {
+      opacity: 0.9;
+    }
+
     #unlockBtn:disabled {
-      opacity: 0.6;
+      background: var(--gray);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    #countView {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      background: var(--glass-bg);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+      border: 1px solid var(--glass-border);
+    }
+
+    .footer {
+      margin-top: 20px;
+      padding: 15px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .youtube-link {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: rgba(255, 0, 0, 0.1);
+      border-radius: 10px;
+      transition: var(--transition);
+    }
+
+    .youtube-link:hover {
+      background: rgba(255, 0, 0, 0.2);
+    }
+
+    .youtube-link i {
+      color: #ff0000;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .card {
+        padding: 15px;
+      }
+      
+      .brand {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
-
 <body>
-<div class="container">
-  <div class="card">
-    <h2 id="linkTitle">Premium Content</h2>
-    <p id="linkDesc">Complete all tasks to unlock</p>
+  <div class="container">
+    <div class="header">
+      <div class="brand">Hema Tech</div>
+      <div class="tagline">Complete all tasks to unlock premium content. Allow pop-ups if needed.</div>
+    </div>
 
-    <div id="taskList"></div>
+    <div class="card">
+      <h2 class="content-title" id="linkTitle">Premium Content</h2>
+      <p class="content-desc" id="linkDesc">Complete all tasks below to unlock the content. Each task must be completed in order.</p>
 
-    <button id="unlockBtn">Unlock Content 🔓</button>
+      <div class="progress-section">
+        <div class="progress-info">
+          <span>Progress</span>
+          <span id="progressText">0%</span>
+        </div>
+        <div id="progressContainer">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+
+      <div id="taskList">
+        <!-- Tasks will be added here -->
+      </div>
+      
+      <button id="unlockBtn">Unlock Content 🔓</button>
+    </div>
+
     <div id="countView">0 Premium Unlocks</div>
+
+    <div class="footer">
+      <div>All copyright for Hema Tech © 2025-2026</div>
+      <a href="https://youtube.com/@hema_tech1?si=UqCsC50yMsxuftwX" target="_blank" class="youtube-link">
+        <i class="fab fa-youtube"></i>
+        <span>Hema Tech YouTube</span>
+      </a>
+    </div>
   </div>
-</div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  <!-- Linkvertise script -->
+  <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
-    authDomain: "hhhhhh-d4fb8.firebaseapp.com",
-    projectId: "hhhhhh-d4fb8"
-  };
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
+      authDomain: "hhhhhh-d4fb8.firebaseapp.com",
+      databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
+      projectId: "hhhhhh-d4fb8",
+      storageBucket: "hhhhhh-d4fb8.appspot.com",
+      messagingSenderId: "24512338206",
+      appId: "1:24512338206:web:dfe045db59bd3434a2110f",
+      measurementId: "G-HD4R7GNQ5H"
+    };
 
-  const taskList = document.getElementById("taskList");
-  const unlockBtn = document.getElementById("unlockBtn");
-  const countView = document.getElementById("countView");
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  let tasks = [
-    { title: "Subscribe YouTube", link: "https://youtube.com/@hema_tech1", done: false },
-    { title: "Watch Video", link: "https://example.com", done: false },
-    { title: "Join Telegram", link: "https://t.me/example", done: false }
-  ];
+    const urlParams = new URLSearchParams(window.location.search);
+    const linkId = urlParams.get("id");
 
-  let unlockCount = 0;
-  let canClickUnlock = true;
+    const linkTitle = document.getElementById("linkTitle");
+    const linkDesc = document.getElementById("linkDesc");
+    const taskList = document.getElementById("taskList");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const countView = document.getElementById("countView");
 
-  function renderTasks() {
-    taskList.innerHTML = "";
-    const completed = tasks.filter(t => t.done).length;
+    let tasks = [];
+    let completed = 0;
+    let destination = "";
+    let docId = "";
+    let unlockCount = 0;
+    let canClickUnlock = true;
 
-    tasks.forEach((task, i) => {
-      if (i > completed) return;
+    // Demo data
+    const demoData = {
+      title: "Premium Content",
+      description: "Complete all tasks below to unlock the content. Each task must be completed in order.",
+      destination: "https://www.example.com",
+      tasks: [
+        { 
+          id: "task1",
+          typeLabel: "Subscribe to Channel", 
+          link: "https://youtube.com/@hema_tech1", 
+          done: false,
+          icon: "fab fa-youtube",
+          description: "Subscribe to Hema Tech YouTube channel"
+        },
+        { 
+          id: "task2",
+          typeLabel: "Watch Video", 
+          link: "https://www.example.com/video1", 
+          done: false,
+          icon: "fas fa-play",
+          description: "Watch the required video until the end"
+        },
+        { 
+          id: "task3",
+          typeLabel: "Join Group", 
+          link: "https://www.example.com/group", 
+          done: false,
+          icon: "fas fa-users",
+          description: "Join our Telegram group"
+        }
+      ],
+      unlockCount: 42
+    };
 
-      const div = document.createElement("div");
-      div.className = "task";
-      div.innerHTML = `
-        <span>${task.title}</span>
-        ${task.done ? "✅" : `<button onclick="startTask(${i})">Start</button>`}
-      `;
-      taskList.appendChild(div);
-    });
+    // Load data
+    function loadData(data) {
+      linkTitle.textContent = data.title;
+      linkDesc.textContent = data.description;
+      destination = data.destination;
+      tasks = data.tasks || [];
+      unlockCount = data.unlockCount || 0;
 
-    if (completed === tasks.length) {
-      unlockBtn.style.display = "block";
+      countView.textContent = `${unlockCount} Premium Unlocks`;
+      renderTasks();
     }
-  }
 
-  window.startTask = function(i) {
-    tasks[i].done = true;
-    window.open(tasks[i].link, "_blank");
-    setTimeout(renderTasks, 5000);
-  };
-
-  function handleUnlockClick() {
-    if (!canClickUnlock) return;
-
-    const allDone = tasks.every(t => t.done);
-    if (!allDone) {
-      alert("Complete all tasks first!");
-      return;
+    // Use demo data if there's no link
+    if (!linkId) {
+      setTimeout(() => {
+        loadData(demoData);
+      }, 500);
+    } else if (linkId) {
+      const q = query(collection(db, "links"), where("idField", "==", linkId));
+      getDocs(q).then(snapshot => {
+        if (!snapshot.empty) {
+          const docSnap = snapshot.docs[0];
+          const data = docSnap.data();
+          docId = docSnap.id;
+          loadData(data);
+        } else {
+          linkTitle.textContent = "Link not found";
+        }
+      }).catch(error => {
+        console.error("Error loading data:", error);
+        loadData(demoData);
+      });
     }
 
-    canClickUnlock = false;
-    unlockBtn.disabled = true;
-    unlockBtn.textContent = "⏳ Redirecting...";
+    function renderTasks() {
+      taskList.innerHTML = "";
+      completed = tasks.filter(t => t.done).length;
 
-    // 🔥 Linkvertise يعمل هنا فقط
-    linkvertise(1264869, {
-      whitelist: [],
-      blacklist: []
-    });
+      tasks.forEach((task, index) => {
+        const div = document.createElement("div");
+        div.className = `task ${task.done ? 'completed' : ''}`;
+        
+        // Hide upcoming tasks
+        if (index > completed) {
+          div.style.display = "none";
+        }
 
-    unlockCount++;
-    countView.textContent = unlockCount + " Premium Unlocks";
+        div.innerHTML = `
+          <div class="task-content">
+            <div class="task-icon">
+              <i class="${task.icon || 'fas fa-tasks'}"></i>
+            </div>
+            <div class="task-text">
+              <div class="task-title">${task.typeLabel || "Task"}</div>
+              <div class="task-desc">${task.description || "Complete this task"}</div>
+            </div>
+          </div>
+          ${task.done ? 
+            '<button style="background: #00ff9d;">✓ Completed</button>' : 
+            `<button onclick="startTask(${index})">Start</button>`
+          }
+        `;
+        taskList.appendChild(div);
+      });
 
-    setTimeout(() => {
-      canClickUnlock = true;
-      unlockBtn.disabled = false;
-      unlockBtn.textContent = "Unlock Content 🔓";
-    }, 10000);
-  }
+      // Update progress
+      const progress = tasks.length > 0 ? (completed / tasks.length) * 100 : 0;
+      progressBar.style.width = progress + "%";
+      progressText.textContent = `${Math.round(progress)}%`;
 
-  unlockBtn.addEventListener("click", handleUnlockClick);
+      // Show unlock button only when ALL tasks are completed
+      if (completed === tasks.length && tasks.length > 0) {
+        unlockBtn.style.display = "block";
+      } else {
+        unlockBtn.style.display = "none";
+      }
+    }
 
-  renderTasks();
-</script>
+    window.startTask = function(index) {
+      const task = tasks[index];
+      if (!task) return;
+      
+      // Mark task as done
+      task.done = true;
+      
+      // Open task link
+      if (task.link) {
+        window.open(task.link, "_blank");
+      }
+      
+      // Wait 10 seconds before showing next task
+      setTimeout(() => {
+        renderTasks();
+      }, 10000);
+    };
+
+    // Handle unlock button click with Linkvertise
+    function handleUnlockClick() {
+      if (!canClickUnlock) {
+        return;
+      }
+      
+      // Check if all tasks are completed
+      const allCompleted = tasks.every(task => task.done);
+      if (!allCompleted) {
+        alert("Please complete ALL tasks before unlocking!");
+        return;
+      }
+      
+      // Disable button for 10 seconds
+      canClickUnlock = false;
+      unlockBtn.disabled = true;
+      unlockBtn.textContent = "⏳ Please wait 10 seconds";
+      
+      // Use Linkvertise to open destination
+      if (destination) {
+        try {
+          // Initialize Linkvertise with your campaign ID
+          linkvertise(1264869, {
+            whitelist: [],
+            blacklist: [""],
+            force: true
+          }).then(() => {
+            // After Linkvertise completes, open the actual destination
+            window.open(destination, "_blank");
+          }).catch(error => {
+            console.error("Linkvertise error:", error);
+            // Fallback: open destination directly if Linkvertise fails
+            window.open(destination, "_blank");
+          });
+        } catch (error) {
+          console.error("Error with Linkvertise:", error);
+          window.open(destination, "_blank");
+        }
+      }
+      
+      // Update counter
+      if (docId) {
+        const docRef = doc(db, "links", docId);
+        updateDoc(docRef, { unlockCount: increment(1) })
+          .then(() => {
+            unlockCount++;
+            countView.textContent = `${unlockCount} Premium Unlocks`;
+          })
+          .catch(error => {
+            console.error("Error updating unlock count:", error);
+          });
+      } else {
+        unlockCount++;
+        countView.textContent = `${unlockCount} Premium Unlocks`;
+      }
+      
+      // Re-enable button after 10 seconds
+      setTimeout(() => {
+        canClickUnlock = true;
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = "Unlock Content 🔓";
+      }, 10000);
+    }
+
+    unlockBtn.addEventListener("click", handleUnlockClick);
+    
+    // Alternative simpler approach if the above doesn't work
+    function handleUnlockClickSimple() {
+      if (!canClickUnlock) return;
+      
+      const allCompleted = tasks.every(task => task.done);
+      if (!allCompleted) {
+        alert("Please complete ALL tasks before unlocking!");
+        return;
+      }
+      
+      canClickUnlock = false;
+      unlockBtn.disabled = true;
+      unlockBtn.textContent = "⏳ Please wait 10 seconds";
+      
+      // Direct Linkvertise redirection
+      if (destination) {
+        // Create a temporary link with Linkvertise
+        const tempLink = `https://link-to.net/${1264869}/${Math.random() * 1000}/dynamic`;
+        
+        // Redirect through Linkvertise
+        window.open(tempLink, "_blank");
+        
+        // After a short delay, open the actual destination
+        setTimeout(() => {
+          window.open(destination, "_blank");
+        }, 2000);
+      }
+      
+      // Update counter
+      if (docId) {
+        const docRef = doc(db, "links", docId);
+        updateDoc(docRef, { unlockCount: increment(1) })
+          .then(() => {
+            unlockCount++;
+            countView.textContent = `${unlockCount} Premium Unlocks`;
+          })
+          .catch(error => {
+            console.error("Error updating unlock count:", error);
+          });
+      } else {
+        unlockCount++;
+        countView.textContent = `${unlockCount} Premium Unlocks`;
+      }
+      
+      // Re-enable button
+      setTimeout(() => {
+        canClickUnlock = true;
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = "Unlock Content 🔓";
+      }, 10000);
+    }
+    
+    // You can switch between the two methods by changing the event listener:
+    // unlockBtn.addEventListener("click", handleUnlockClick); // Method 1
+    // unlockBtn.addEventListener("click", handleUnlockClickSimple); // Method 2
+  </script>
 </body>
 </html>

@@ -411,8 +411,8 @@
       // بدء المؤقت
       startTaskTimer(id);
       
-      // النقل مباشرة إلى الرابط
-      window.open(TASK_LINKS[id], '_blank');
+      // الذهاب إلى الرابط في نفس الصفحة
+      window.location.href = TASK_LINKS[id];
     }
     
     // بدء مؤقت المهمة
@@ -422,10 +422,9 @@
       
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
-      
       timerElement.style.display = "block";
       
-      // بدء عد تنازلي
+      // بدء العد التنازلي
       let timeLeft = 10;
       taskTimers[id] = setInterval(() => {
         timerElement.textContent = `الوقت المتبقي: ${timeLeft} ثواني`;
@@ -483,7 +482,7 @@
     
     // فتح المحتوى
     function unlock() {
-      // توجيه إلى رابط المحتوى في نفس التبويب
+      // توجيه إلى رابط المحتوى في نفس الصفحة
       window.location.href = FINAL_UNLOCK_LINK;
       
       // مسح بيانات التخزين المحلي بعد التأخير
@@ -521,4 +520,4 @@
     });
   </script>
 </body>
-</html> 
+</html>

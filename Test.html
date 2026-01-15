@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة اختبار Linkvertise</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding-top: 50px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .btn {
+            display: block;
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            margin: 15px auto;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            width: 80%;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>تجربة سكربت الإعلانات</h1>
+        <p>جرب الضغط على الروابط التالية لاختبار عمل السكربت:</p>
+
+        <a href="https://www.google.com" class="btn">الذهاب إلى Google</a>
+
+        <a href="https://www.mediafire.com" class="btn">الذهاب إلى Mediafire</a>
+    </div>
+
+    <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
+    <script>
+        // الكود كما طلبته
+        linkvertise(1264869, {whitelist: [], blacklist: []});
+    </script>
+    </body>
+</html>

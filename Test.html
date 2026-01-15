@@ -1,55 +1,219 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة اختبار Linkvertise</title>
+    <title>Get Link - Steps</title>
     <style>
+        /* تنسيق الصفحة العام */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            padding-top: 50px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .btn {
-            display: block;
-            background-color: #007bff;
+            background-color: #121212; /* خلفية سوداء */
             color: white;
-            padding: 15px 20px;
-            margin: 15px auto;
-            text-decoration: none;
-            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* الصندوق الأساسي */
+        .container {
+            background-color: #1e1e1e;
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+
+        h2 { margin-bottom: 25px; color: #fff; }
+
+        /* تنسيق الأزرار */
+        .step-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 16px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 10px;
             font-size: 18px;
-            width: 80%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none; /* عشان الرابط الأخير */
+            box-sizing: border-box;
         }
-        .btn:hover {
-            background-color: #0056b3;
+
+        /* 1. الزر النشط (متاح للضغط) */
+        .step-active {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 4px 0 #2980b9;
         }
+        .step-active:hover { transform: translateY(-2px); }
+        .step-active:active { transform: translateY(2px); box-shadow: none; }
+
+        /* 2. الزر المقفول (لسه دوره مجاش) */
+        .step-locked {
+            background-color: #333;
+            color: #777;
+            cursor: not-allowed;
+            pointer-events: none; /* يمنع الضغط */
+            border: 1px solid #444;
+        }
+
+        /* 3. الزر المكتمل (تمت المهمة) */
+        .step-done {
+            background-color: #27ae60;
+            color: white;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* 4. زر الفتح النهائي */
+        #unlockLink {
+            background-color: #f1c40f;
+            color: #2c3e50;
+            display: none; /* مخفي لحد ما يخلص */
+            box-shadow: 0 4px 0 #d35400;
+            animation: pulse 2s infinite;
+        }
+        #unlockLink:hover { background-color: #f39c12; }
+
+        /* تأثير نبض للزر الأخير */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
+        }
+
+        /* رابط إعادة الضبط للتجربة */
+        .reset-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #555;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .reset-link:hover { color: #888; }
+
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>تجربة سكربت الإعلانات</h1>
-        <p>جرب الضغط على الروابط التالية لاختبار عمل السكربت:</p>
+        <h2>⚡ Complete Steps</h2>
 
-        <a href="https://www.google.com" class="btn">الذهاب إلى Google</a>
+        <button id="btn1" class="step-btn" onclick="completeStep(1)">Step 1: Subscribe</button>
+        
+        <button id="btn2" class="step-btn" onclick="completeStep(2)">Step 2: Like Video</button>
+        
+        <button id="btn3" class="step-btn" onclick="completeStep(3)">Step 3: Comment</button>
 
-        <a href="https://www.mediafire.com" class="btn">الذهاب إلى Mediafire</a>
+        <a id="unlockLink" href="https://www.mediafire.com" class="step-btn" target="_blank">🔓 UNLOCK DOWNLOAD</a>
+        
+        <br>
+        <span class="reset-link" onclick="resetProgress()">Reset Progress (Test Mode)</span>
     </div>
+
+    <script>
+        // ================= إعدادات الروابط =================
+        const stepLinks = {
+            1: "https://www.youtube.com/@HemaTech_1?sub_confirmation=1", // رابط القناة
+            2: "https://www.youtube.com", // رابط الفيديو للايك
+            3: "https://www.facebook.com" // رابط تعليق أو غيره
+        };
+        // ===================================================
+
+        // استدعاء التقدم المحفوظ
+        let currentProgress = localStorage.getItem('hemaUserProgress') || 0;
+        currentProgress = parseInt(currentProgress);
+
+        // تشغيل فحص الأزرار عند فتح الصفحة
+        updateUI();
+
+        function completeStep(stepNum) {
+            // فتح الرابط
+            if(stepLinks[stepNum]) {
+                window.open(stepLinks[stepNum], '_blank');
+            }
+
+            // لو الخطوة دي جديدة عليه، نسجل التقدم
+            if (stepNum > currentProgress) {
+                // نحدث المتغير
+                currentProgress = stepNum;
+                // نحفظ في المتصفح
+                localStorage.setItem('hemaUserProgress', currentProgress);
+                
+                // نحدث شكل الزراير (بتأخير بسيط عشان يحس انه بيحمل)
+                setTimeout(updateUI, 1000); 
+            }
+        }
+
+        function updateUI() {
+            const btn1 = document.getElementById('btn1');
+            const btn2 = document.getElementById('btn2');
+            const btn3 = document.getElementById('btn3');
+            const unlockLink = document.getElementById('unlockLink');
+
+            // تنظيف الكلاسات القديمة
+            resetBtn(btn1); resetBtn(btn2); resetBtn(btn3);
+
+            // === منطق الخطوة 1 ===
+            if (currentProgress >= 1) {
+                btn1.classList.add('step-done');
+                btn1.innerText = "Step 1: Done ✓";
+            } else {
+                btn1.classList.add('step-active');
+            }
+
+            // === منطق الخطوة 2 ===
+            if (currentProgress >= 2) {
+                btn2.classList.add('step-done');
+                btn2.innerText = "Step 2: Done ✓";
+            } else if (currentProgress == 1) {
+                btn2.classList.add('step-active');
+            } else {
+                btn2.classList.add('step-locked'); // مقفول
+                btn2.innerText = "Step 2: Locked 🔒";
+            }
+
+            // === منطق الخطوة 3 ===
+            if (currentProgress >= 3) {
+                btn3.classList.add('step-done');
+                btn3.innerText = "Step 3: Done ✓";
+                
+                // إظهار الرابط النهائي
+                unlockLink.style.display = "flex"; 
+            } else if (currentProgress == 2) {
+                btn3.classList.add('step-active');
+            } else {
+                btn3.classList.add('step-locked'); // مقفول
+                btn3.innerText = "Step 3: Locked 🔒";
+            }
+        }
+
+        function resetBtn(elem) {
+            elem.className = "step-btn"; // رجعه للأصل
+        }
+
+        function resetProgress() {
+            localStorage.removeItem('hemaUserProgress');
+            location.reload();
+        }
+    </script>
 
     <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
     <script>
-        // الكود كما طلبته
+        // إعدادات السكربت كما طلبتها
         linkvertise(1264869, {whitelist: [], blacklist: []});
     </script>
-    </body>
-</html>
+
+</body>
+</html> 

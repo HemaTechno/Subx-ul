@@ -200,7 +200,7 @@
             } else {
                 btn1.classList.add('step-active');
                 // لو الزر لسه مش خلصان، نرجع النص لأصله لو كان متغير
-                if(!btn1.innerText.includes("Verifying")) btn1.innerText = "Step 1: Subscribe";
+                if(!btn1.innerText.includes("Verifying")) btn1.innerText = "Step 1: Linkvertise";
             }
 
             // Step 2
@@ -211,7 +211,7 @@
                 btn2.classList.add('step-active');
                 // تأكد إن الرابط موجود عشان يقدر يضغط
                 if(btn2.getAttribute('href') === null) btn2.setAttribute('href', "https://www.youtube.com");
-                if(!btn2.innerText.includes("Verifying")) btn2.innerText = "Step 2: Like Video";
+                if(!btn2.innerText.includes("Verifying")) btn2.innerText = "Step 2: Linkvertise";
             } else {
                 btn2.classList.add('step-locked');
                 btn2.removeAttribute('href'); // شيل الرابط عشان ميضغطش
@@ -226,7 +226,7 @@
             } else if (currentProgress == 2) {
                 btn3.classList.add('step-active');
                 if(btn3.getAttribute('href') === null) btn3.setAttribute('href', "https://www.facebook.com");
-                if(!btn3.innerText.includes("Verifying")) btn3.innerText = "Step 3: Comment";
+                if(!btn3.innerText.includes("Verifying")) btn3.innerText = "Step 3: Linkvertise";
             } else {
                 btn3.classList.add('step-locked');
                 btn3.removeAttribute('href');

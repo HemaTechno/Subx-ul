@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Generator - Hema System</title>
+    <style>
+        /* ================= تصميم الصفحة (Dark Mode) ================= */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            border: 1px solid #333;
+        }
+
+        h2 { margin-bottom: 25px; color: #fff; font-size: 24px; }
+        
+        /* تصميم الأزرار والروابط */
+        .step-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 18px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-sizing: border-box;
+            color: white;
+            position: relative;
+            background-color: #3498db;
+            box-shadow: 0 4px 0 #2980b9;
+        }
+
+        .step-btn:hover { transform: translateY(-2px); }
+        .step-btn:active { transform: translateY(2px); box-shadow: none; }
+
+        /* حالة الانتظار (العداد) */
+        .step-waiting {
+            background-color: #e67e22 !important;
+            box-shadow: 0 4px 0 #d35400 !important;
+            cursor: wait;
+            pointer-events: none; /* يمنع الضغط المتكرر */
+        }
+
+        /* حالة القفل */
+        .step-locked {
+            background-color: #333 !important;
+            color: #777 !important;
+            box-shadow: none !important;
+            cursor: not-allowed;
+            pointer-events: none;
+            border: 1px solid #444;
+        }
+
+        /* حالة الانتهاء */
+        .step-done {
+            background-color: #27ae60 !important;
+            box-shadow: none !important;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* زر توليد المفتاح */
+        #getKeyBtn {
+            background-color: #8e44ad;
+            box-shadow: 0 4px 0 #6c3483;
+            display: none; /* مخفي في البداية */
+            animation: pulse 2s infinite;
+        }
+        #getKeyBtn:hover { background-color: #9b59b6; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(142, 68, 173, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(142, 68, 173, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(142, 68, 173, 0); }
+        }
+
+        /* منطقة عرض المفتاح */
+        #keyArea {
+            display: none;
+            margin-top: 25px;
+            background: #252525;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px dashed #f1c40f;
+        }
+        
+        #generatedKey {
+            font-family: 'Courier New', monospace;
+            font-size: 22px;
+            font-weight: bold;
+            color: #f1c40f;
+            letter-spacing: 2px;
+            word-break: break-all;
+            user-select: all;
+            margin-top: 10px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .reset-link {
+            display: inline-block;
+            margin-top: 25px;
+            font-size: 13px;
+            color: #666;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .reset-link:hover { color: #999; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>⚡ Get Access Key</h2>
+
+        <a id="btn1" href="https://www.youtube.com/@HemaTech_1" target="_blank" class="step-btn" onclick="startTimer(1, 'btn1')">
+            1️⃣ Subscribe Channel
+        </a>
+        
+        <a id="btn2" href="https://www.youtube.com" target="_blank" class="step-btn" onclick="startTimer(2, 'btn2')">
+            2️⃣ Like Video
+        </a>
+        
+        <a id="btn3" href="https://www.facebook.com" target="_blank" class="step-btn" onclick="startTimer(3, 'btn3')">
+            3️⃣ Join Group
+        </a>
+
+        <button id="getKeyBtn" class="step-btn" onclick="fetchKey()">
+            <span>🔑 GENERATE KEY (24H)</span>
+            <div id="spinner" class="loading-spinner"></div>
+        </button>
+
+        <div id="keyArea">
+            <span style="color:#aaa; font-size:14px;">Your Private Key:</span>
+            <div id="generatedKey">Wait...</div>
+            <p style="color:#555; font-size:12px; margin-top:5px;">Expires automatically in 24 hours.</p>
+        </div>
+        
+        <br>
+        <span class="reset-link" onclick="resetProgress()">Reset Progress (Test Mode)</span>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // ==============================================
+        // 2. إعدادات Firebase (يجب تعديلها ببياناتك)
+        // ==============================================
+        const firebaseConfig = {
+  apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
+  authDomain: "hhhhhh-d4fb8.firebaseapp.com",
+  databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
+  projectId: "hhhhhh-d4fb8",
+  storageBucket: "hhhhhh-d4fb8.appspot.com",
+  messagingSenderId: "24512338206",
+  appId: "1:24512338206:web:dfe045db59bd3434a2110f",
+  measurementId: "G-HD4R7GNQ5H"
+};
+
+        // تهيئة التطبيق
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // ==============================================
+        // 3. إعدادات المهام والتايمر
+        // ==============================================
+        const WAIT_SECONDS = 10; // مدة الانتظار بالثواني
+        let currentProgress = localStorage.getItem('hemaUserProgress') || 0;
+        currentProgress = parseInt(currentProgress);
+        let isTimerRunning = false;
+
+        // إنشاء معرف للمستخدم لو مش موجود
+        let userId = localStorage.getItem('hemaUniqueUserID');
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('hemaUniqueUserID', userId);
+        }
+
+        // تشغيل التحقق من الواجهة
+        updateUI();
+
+        // --- دالة التايمر (العد التنازلي) ---
+        function startTimer(stepNum, btnId) {
+            // لو الخطوة خلصانة أو العداد شغال، اخرج
+            if (stepNum <= currentProgress || isTimerRunning) return;
+
+            isTimerRunning = true;
+            let timeLeft = WAIT_SECONDS;
+            const btn = document.getElementById(btnId);
+            
+            // تغيير الشكل للانتظار
+            btn.classList.remove('step-active');
+            btn.classList.add('step-waiting');
+            btn.innerText = `Verifying... ${timeLeft}s`;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                btn.innerText = `Verifying... ${timeLeft}s`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    finishStep(stepNum); // إنهاء الخطوة
+                }
+            }, 1000);
+        }
+
+        // --- دالة إنهاء الخطوة وحفظ التقدم ---
+        function finishStep(stepNum) {
+            isTimerRunning = false;
+            if (stepNum > currentProgress) {
+                currentProgress = stepNum;
+                localStorage.setItem('hemaUserProgress', currentProgress);
+                updateUI();
+            }
+        }
+
+        // --- دالة تحديث الأزرار (القفل والفتح) ---
+        function updateUI() {
+            const btn1 = document.getElementById('btn1');
+            const btn2 = document.getElementById('btn2');
+            const btn3 = document.getElementById('btn3');
+            const getKeyBtn = document.getElementById('getKeyBtn');
+
+            resetClass(btn1); resetClass(btn2); resetClass(btn3);
+
+            // Step 1
+            if (currentProgress >= 1) {
+                btn1.classList.add('step-done');
+                btn1.innerText = "1️⃣ Subscribe: Done ✓";
+            } else {
+                btn1.classList.add('step-active');
+                if(!btn1.innerText.includes("Verifying")) btn1.innerText = "1️⃣ Subscribe Channel";
+            }
+
+            // Step 2
+            if (currentProgress >= 2) {
+                btn2.classList.add('step-done');
+                btn2.innerText = "2️⃣ Like: Done ✓";
+            } else if (currentProgress == 1) {
+                btn2.classList.add('step-active');
+                if(!btn2.getAttribute('href')) btn2.setAttribute('href', "https://www.youtube.com"); // استرجع الرابط
+                if(!btn2.innerText.includes("Verifying")) btn2.innerText = "2️⃣ Like Video";
+            } else {
+                btn2.classList.add('step-locked');
+                btn2.removeAttribute('href'); // إزالة الرابط للقفل
+                btn2.innerText = "2️⃣ Locked 🔒";
+            }
+
+            // Step 3
+            if (currentProgress >= 3) {
+                btn3.classList.add('step-done');
+                btn3.innerText = "3️⃣ Join: Done ✓";
+                getKeyBtn.style.display = "flex"; // إظهار زر المفتاح
+            } else if (currentProgress == 2) {
+                btn3.classList.add('step-active');
+                if(!btn3.getAttribute('href')) btn3.setAttribute('href', "https://www.facebook.com");
+                if(!btn3.innerText.includes("Verifying")) btn3.innerText = "3️⃣ Join Group";
+            } else {
+                btn3.classList.add('step-locked');
+                btn3.removeAttribute('href');
+                btn3.innerText = "3️⃣ Locked 🔒";
+            }
+        }
+
+        function resetClass(elem) {
+            if (!elem.classList.contains('step-waiting')) {
+                elem.className = "step-btn"; 
+            }
+        }
+
+        // ==============================================
+        // 4. دالة جلب/توليد المفتاح مع الحذف التلقائي
+        // ==============================================
+        async function fetchKey() {
+            const btn = document.getElementById('getKeyBtn');
+            const spinner = document.getElementById('spinner');
+            const keyArea = document.getElementById('keyArea');
+            const keyText = document.getElementById('generatedKey');
+
+            btn.disabled = true;
+            spinner.style.display = "inline-block";
+            btn.querySelector('span').innerText = "CONNECTING...";
+
+            try {
+                const userRef = db.collection('keys').doc(userId);
+                const doc = await userRef.get();
+                let finalKey = "";
+
+                if (doc.exists) {
+                    const data = doc.data();
+                    const now = new Date();
+                    const expireDate = data.expireAt.toDate();
+
+                    // التحقق من الوقت محلياً أيضاً
+                    if (now < expireDate) {
+                        finalKey = data.key;
+                    } else {
+                        // لو منتهي الصلاحية نجدده
+                        finalKey = await createNewKey(userRef);
+                    }
+                } else {
+                    // مستخدم جديد
+                    finalKey = await createNewKey(userRef);
+                }
+
+                keyArea.style.display = "block";
+                keyText.innerText = finalKey;
+                btn.style.display = "none";
+
+            } catch (error) {
+                console.error("Error:", error);
+                btn.querySelector('span').innerText = "ERROR! TRY AGAIN";
+                btn.disabled = false;
+                spinner.style.display = "none";
+                alert("تأكد من إعدادات Firebase بشكل صحيح!");
+            }
+        }
+
+        // دالة إنشاء مفتاح وحفظ وقت الحذف
+        async function createNewKey(ref) {
+            const newKey = generateRandomKey();
+            const expireDate = new Date();
+            expireDate.setHours(expireDate.getHours() + 24); // إضافة 24 ساعة
+
+            await ref.set({
+                key: newKey,
+                // هذا الحقل الذي سيراقبه فايربيز للحذف
+                expireAt: firebase.firestore.Timestamp.fromDate(expireDate)
+            });
+            return newKey;
+        }
+
+        function generateRandomKey() {
+            const part = () => Math.random().toString(36).substr(2, 4).toUpperCase();
+            return `HEMA-${part()}-${part()}-${part()}`;
+        }
+
+        function resetProgress() {
+            localStorage.removeItem('hemaUserProgress');
+            location.reload();
+        }
+    </script>
+
+    <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
+    <script>
+        // إعدادات السكربت: يراقب الروابط الخارجية تلقائياً
+        linkvertise(1264869, {whitelist: [], blacklist: []});
+    </script>
+
+</body>
+</html>

@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks & Unlock</title>
+    <title>Tasks & Unlock (Timer)</title>
     <style>
-        /* نفس التصميم الاحترافي السابق */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #121212;
@@ -30,7 +29,6 @@
 
         h2 { margin-bottom: 25px; color: #fff; }
 
-        /* تنسيق الروابط لتبدو كأزرار */
         .step-btn {
             display: flex;
             justify-content: center;
@@ -44,18 +42,26 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none; /* إزالة الخط من تحت الروابط */
+            text-decoration: none;
             box-sizing: border-box;
-            color: white; /* لون النص */
+            color: white;
+            position: relative;
         }
 
-        /* الحالات المختلفة للأزرار */
         .step-active {
             background-color: #3498db;
             box-shadow: 0 4px 0 #2980b9;
         }
         .step-active:hover { transform: translateY(-2px); }
         .step-active:active { transform: translateY(2px); box-shadow: none; }
+
+        /* كلاس للزر وهو بيعد وقت */
+        .step-waiting {
+            background-color: #e67e22; /* برتقالي */
+            color: white;
+            cursor: wait;
+            pointer-events: none; /* يمنع الضغط المتكرر */
+        }
 
         .step-locked {
             background-color: #333;
@@ -69,10 +75,9 @@
             background-color: #27ae60;
             color: white;
             cursor: default;
-            /* نسمح بالضغط مرة أخرى لو الزائر أراد، أو نمنعه بـ pointer-events: none */
+            pointer-events: none;
         }
 
-        /* زر الفتح النهائي */
         #unlockBtn {
             background-color: #f1c40f;
             color: #2c3e50;
@@ -103,15 +108,15 @@
     <div class="container">
         <h2>⚡ Complete Tasks</h2>
 
-        <a id="btn1" href="https://www.google.com" target="_blank" class="step-btn" onclick="completeStep(1)">
+        <a id="btn1" href="https://www.youtube.com/@HemaTech_1" target="_blank" class="step-btn" onclick="startTimer(1, 'btn1')">
             Step 1: Subscribe
         </a>
         
-        <a id="btn2" href="https://www.youtube.com" target="_blank" class="step-btn" onclick="completeStep(2)">
+        <a id="btn2" href="https://www.youtube.com" target="_blank" class="step-btn" onclick="startTimer(2, 'btn2')">
             Step 2: Like Video
         </a>
         
-        <a id="btn3" href="https://www.facebook.com" target="_blank" class="step-btn" onclick="completeStep(3)">
+        <a id="btn3" href="https://www.facebook.com" target="_blank" class="step-btn" onclick="startTimer(3, 'btn3')">
             Step 3: Comment
         </a>
 
@@ -124,32 +129,58 @@
     </div>
 
     <script>
-        // ==========================================
-        // ضع الرابط النهائي هنا (ميديا فاير مثلاً)
+        // === إعدادات ===
         const FINAL_DESTINATION = "https://www.mediafire.com";
-        // ==========================================
+        const WAIT_SECONDS = 10; // عدد الثواني هنا
+        // ==============
 
         let currentProgress = localStorage.getItem('hemaUserProgress') || 0;
         currentProgress = parseInt(currentProgress);
 
+        // متغير لمنع حدوث خطأ لو ضغط على زرارين في نفس الوقت
+        let isTimerRunning = false;
+
         updateUI();
 
-        function completeStep(stepNum) {
-            // ملاحظة: الرابط يفتح تلقائياً بسبب href في الـ HTML
-            // هذا الكود فقط لتسجيل التقدم
+        function startTimer(stepNum, btnId) {
+            // لو الخطوة معمولة قبل كدا، منعملش حاجة
+            if (stepNum <= currentProgress || isTimerRunning) return;
+
+            isTimerRunning = true;
+            let timeLeft = WAIT_SECONDS;
+            const btn = document.getElementById(btnId);
+            const originalText = btn.innerText; // نحفظ النص الأصلي
+
+            // تغيير شكل الزر لـ "انتظار"
+            btn.classList.remove('step-active');
+            btn.classList.add('step-waiting');
+            
+            // تحديث النص فوراً
+            btn.innerText = `Verifying... ${timeLeft}s`;
+
+            // تشغيل العداد كل ثانية
+            const countdown = setInterval(() => {
+                timeLeft--;
+                btn.innerText = `Verifying... ${timeLeft}s`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown); // وقف العداد
+                    finishStep(stepNum);      // اعتمد الخطوة
+                }
+            }, 1000);
+        }
+
+        function finishStep(stepNum) {
+            isTimerRunning = false;
             
             if (stepNum > currentProgress) {
-                // نعتبره خلص الخطوة بمجرد الضغط (لأننا لا نستطيع التأكد من الاشتراك فعلياً)
                 currentProgress = stepNum;
                 localStorage.setItem('hemaUserProgress', currentProgress);
-                
-                // تحديث الشكل بعد ثانية
-                setTimeout(updateUI, 1000); 
+                updateUI();
             }
         }
 
         function openFinalLink() {
-            // فتح الرابط النهائي مباشرة بدون Linkvertise
             window.open(FINAL_DESTINATION, '_blank');
         }
 
@@ -159,6 +190,7 @@
             const btn3 = document.getElementById('btn3');
             const unlockBtn = document.getElementById('unlockBtn');
 
+            // تنظيف (إزالة كلاس الانتظار لو موجود)
             resetClass(btn1); resetClass(btn2); resetClass(btn3);
 
             // Step 1
@@ -167,6 +199,8 @@
                 btn1.innerText = "Step 1: Done ✓";
             } else {
                 btn1.classList.add('step-active');
+                // لو الزر لسه مش خلصان، نرجع النص لأصله لو كان متغير
+                if(!btn1.innerText.includes("Verifying")) btn1.innerText = "Step 1: Subscribe";
             }
 
             // Step 2
@@ -175,10 +209,12 @@
                 btn2.innerText = "Step 2: Done ✓";
             } else if (currentProgress == 1) {
                 btn2.classList.add('step-active');
+                // تأكد إن الرابط موجود عشان يقدر يضغط
+                if(btn2.getAttribute('href') === null) btn2.setAttribute('href', "https://www.youtube.com");
+                if(!btn2.innerText.includes("Verifying")) btn2.innerText = "Step 2: Like Video";
             } else {
                 btn2.classList.add('step-locked');
-                // نلغي الـ href مؤقتاً عشان ميعرفش يضغط وهو مقفول
-                btn2.removeAttribute('href'); 
+                btn2.removeAttribute('href'); // شيل الرابط عشان ميضغطش
                 btn2.innerText = "Step 2: Locked 🔒";
             }
 
@@ -186,23 +222,23 @@
             if (currentProgress >= 3) {
                 btn3.classList.add('step-done');
                 btn3.innerText = "Step 3: Done ✓";
-                unlockBtn.style.display = "flex"; // إظهار الزر الأخير
+                unlockBtn.style.display = "flex";
             } else if (currentProgress == 2) {
                 btn3.classList.add('step-active');
+                if(btn3.getAttribute('href') === null) btn3.setAttribute('href', "https://www.facebook.com");
+                if(!btn3.innerText.includes("Verifying")) btn3.innerText = "Step 3: Comment";
             } else {
                 btn3.classList.add('step-locked');
                 btn3.removeAttribute('href');
                 btn3.innerText = "Step 3: Locked 🔒";
             }
-
-            // إعادة وضع الروابط لو بقت متاحة (عشان لما نشيلها فوق نرجعها هنا)
-            // لازم تحط روابطك هنا كمان عشان لو الصفحة عملت تحديث
-            if(currentProgress == 1) document.getElementById('btn2').href = "https://www.youtube.com"; 
-            if(currentProgress == 2) document.getElementById('btn3').href = "https://www.facebook.com"; 
         }
 
         function resetClass(elem) {
-            elem.className = "step-btn";
+            // بنشيل أي كلاسات ونرجع الأساسي بس، لكن بنسيب الـ waiting لو شغال
+            if (!elem.classList.contains('step-waiting')) {
+                elem.className = "step-btn"; 
+            }
         }
 
         function resetProgress() {
@@ -213,8 +249,6 @@
 
     <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
     <script>
-        // الآن السكربت هيشتغل على أي رابط <a> في الصفحة (اللي هما Step 1, 2, 3)
-        // ولن يشتغل على الزر الأخير لأنه <button>
         linkvertise(1264869, {whitelist: [], blacklist: []});
     </script>
 
